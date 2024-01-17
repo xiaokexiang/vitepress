@@ -1,11 +1,14 @@
 ---
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
-
+head:
+  - - link
+    - rel: stylesheet
+      href: https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css
 hero:
   name: "Welcome to"
-  text: "  xiaokexiang's Blog"
-  tagline: keep imporving 👆
+  text: " xiaokexiang's Blog"
+  tagline: " keep imporving👻"
   actions:
     - theme: brand
       text: Getting Started

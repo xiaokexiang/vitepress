@@ -5,7 +5,12 @@
     "docs:preview": "vitepress preview"
   },
   "dependencies": {
+    "@mermaid-js/mermaid-mindmap": "9.3.0",
+    "gray-matter": "^4.0.3",
+    "markdown-it-mathjax3": "^4.3.2",
+    "mermaid": "9.1.0",
     "vitepress": "^1.0.0-rc.39",
-    "vitepress-plugin-back-to-top": "^1.0.1"
+    "vitepress-plugin-back-to-top": "^1.0.1",
+    "vitepress-plugin-mermaid": "2.0.10"
   }
 }

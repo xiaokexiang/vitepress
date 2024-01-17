@@ -1,26 +1,18 @@
 ---
-title: "Grpc快速入门"
-date: 2022-04-22T16:29:25+08:00
-description: "grpc是一款高性能、开源的通用Rpc框架"
-tags: ["grpc "]
-categories: [
-  "grpc"
-]
-hideReadMore: true
-slug: grpc
+sort: 31
+lastUpdated: "2022-04-22T16:29:25+08:00"
 ---
-
-## Grpc快速入门
-
-> <a href="https://grpc.io/">grpc</a>是一款高性能、开源的通用Rpc框架。由google开源，默认使用<a href="https://github.com/protocolbuffers/protobuf">protobuf</a>作为定义接口的语言(IDL)和底层的消息交换格式，使用Http/2作为传输协议。
-
+# Grpc
+::: tip
+<a href="https://grpc.io/">grpc</a>是一款高性能、开源的通用Rpc框架。由google开源，默认使用<a href="https://github.com/protocolbuffers/protobuf">protobuf</a>作为定义接口的语言(IDL)和底层的消息交换格式，使用Http/2作为传输协议。
+:::
 ---
 
 ### Rpc简介
 
 Rpc(remote procedure call)，即远程过程调用。服务器A上的服务想调用服务器B上的服务提供的方法，因为不存在于同一个内存空间，不能直接调用，需要通过网络来表达调用的语义和传达调用的数据。
 
- Rpc像调用本地方法一样去调用远程方法。
+> Rpc像调用本地方法一样去调用远程方法。
 
 #### Http与Rpc
 
@@ -58,8 +50,7 @@ http传输协议头中包含冗余的部分，且使用了文本编码（body仍
 
 #### pom配置
 
-:::details pom.xml配置
-```xml{10}
+```xml
 <dependency>
     <groupId>io.grpc</groupId>
     <artifactId>grpc-netty-shaded</artifactId>
@@ -127,7 +118,8 @@ http传输协议头中包含冗余的部分，且使用了文本编码（body仍
     </plugins>
 </build>
 ```
-:::
+
+
 
 #### protobuf文件
 

@@ -21,34 +21,65 @@
     font-weight: normal;
     font-style: normal;
 }
-
+/* https://image.leejay.top/fonts/JetBrainsMono-SemiBold.ttf */
 @font-face {
     font-family: 'Jetbrain Mono';
     src: url('../fonts/JetBrainsMonoNL-SemiBold.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
 }
+.VPDoc img {
+    border-radius: 10px; /* 设置圆角半径，根据需要调整数值 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 设置阴影，根据需要调整参数 */
+}
+
+.VPDoc li {
+    font-size: 16px; /* p标签字体 */
+}
 
 .VPNav img {
     border-radius: 50%;
 }
 
-.VPHero.has-image .name[data-v-89d2fc22], .VPHero.has-image .text {
+.VPHero.has-image .text {
     font-size: 45px;
 }
 
-.VPHero.has-image .name[data-v-89d2fc22], .VPHero.has-image .name {
+.VPHero.has-image .name {
     font-size: 85px;
 }
 
-/* @media (max-width: 960px) {
-    .VPHero.has-image .name[data-v-89d2fc22], .VPHero.has-image .name {
-        font-size: 80px;
+.VPDoc h2 {
+    font-size: calc(var(--vp-code-font-size) * 2);
+}
+
+.VPDoc h3 {
+    font-size: calc(var(--vp-code-font-size) * 1.8);
+}
+.VPDoc h4 {
+    padding-top: 20px!important;
+    font-size: calc(var(--vp-code-font-size) * 1.5);
+}
+.VPDoc h4 a{
+    padding-top: 20px!important;
+}
+.VPDoc h5{
+    padding-top: 20px!important;
+    font-size: calc(var(--vp-code-font-size) * 1.2);
+}
+.VPDoc h5 a{
+    padding-top: 20px!important;
+}
+
+@media (max-width: 640px) {
+    .VPHero.has-image .text {
+        font-size: 25px;
     }
-    .VPHero.has-image .name[data-v-89d2fc22], .VPHero.has-image .text {
-        font-size: 30px;
+    
+    .VPHero.has-image .name {
+        font-size:50px;
     }
-} */
+}
 
 @media (min-width: 1440px) {
     :root {
@@ -91,5 +122,6 @@
 
     .VPDoc .aside {
         padding-left: 30px !important;
+        width: 250px;
     }
 }
