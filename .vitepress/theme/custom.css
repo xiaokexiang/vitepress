@@ -1,0 +1,95 @@
+:root {
+    --vp-layout-max-width: 1920px;
+    /* 处理文章宽度和sidebar宽度 */
+    --vp-code-font-size: 0.95rem;
+    /* 全局字体大小 */
+    --vp-nav-logo-height: 45px;
+    --vp-font-family-base: 'Jetbrain Mono';
+    --vp-font-family-mono: 'Jetbrain Mono';
+}
+
+@font-face {
+    font-family: 'Jetbrain Mono';
+    src: url('../fonts/JetBrainsMono-Light.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Jetbrain Mono';
+    src: url('../fonts/JetBrainsMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Jetbrain Mono';
+    src: url('../fonts/JetBrainsMonoNL-SemiBold.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+.VPNav img {
+    border-radius: 50%;
+}
+
+.VPHero.has-image .name[data-v-89d2fc22], .VPHero.has-image .text {
+    font-size: 45px;
+}
+
+.VPHero.has-image .name[data-v-89d2fc22], .VPHero.has-image .name {
+    font-size: 85px;
+}
+
+/* @media (max-width: 960px) {
+    .VPHero.has-image .name[data-v-89d2fc22], .VPHero.has-image .name {
+        font-size: 80px;
+    }
+    .VPHero.has-image .name[data-v-89d2fc22], .VPHero.has-image .text {
+        font-size: 30px;
+    }
+} */
+
+@media (min-width: 1440px) {
+    :root {
+        --vp-layout-max-width: 100% !important;
+        --vp-nav-logo-height: 80% !important
+    }
+
+    .VPDoc.has-aside .content-container {
+        max-width: 960px !important;
+    }
+
+    .VPDoc.has-aside .content {
+        font-size: 13px;
+        padding-left: 20px;
+    }
+
+    .VPDoc.has-aside .content p {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    :root {
+        --vp-layout-max-width: 95% !important;
+        --vp-code-font-size: 1rem !important;
+    }
+
+    .VPDoc.has-aside .content-container {
+        max-width: 1280px !important;
+    }
+
+    .VPDoc.has-aside .content {
+        font-size: 14px;
+        padding-left: 20px;
+    }
+
+    .VPDoc.has-aside .content p {
+        font-size: 1.05rem;
+    }
+
+    .VPDoc .aside {
+        padding-left: 30px !important;
+    }
+}
