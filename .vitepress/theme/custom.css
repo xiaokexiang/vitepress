@@ -1,7 +1,7 @@
 :root {
     --vp-layout-max-width: 1920px;
     /* 处理文章宽度和sidebar宽度 */
-    --vp-code-font-size: 0.95rem;
+    --vp-code-font-size: 0.9rem;
     /* 全局字体大小 */
     --vp-nav-logo-height: 45px;
     --vp-font-family-base: 'Jetbrain Mono';
@@ -21,6 +21,7 @@
     font-weight: normal;
     font-style: normal;
 }
+
 /* https://image.leejay.top/fonts/JetBrainsMono-SemiBold.ttf */
 @font-face {
     font-family: 'Jetbrain Mono';
@@ -28,13 +29,12 @@
     font-weight: 500;
     font-style: normal;
 }
-.VPDoc img {
-    border-radius: 10px; /* 设置圆角半径，根据需要调整数值 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 设置阴影，根据需要调整参数 */
-}
 
-.VPDoc li {
-    font-size: 16px; /* p标签字体 */
+.VPDoc img {
+    border-radius: 10px;
+    /* 设置圆角半径，根据需要调整数值 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* 设置阴影，根据需要调整参数 */
 }
 
 .VPNav img {
@@ -50,40 +50,45 @@
 }
 
 .VPDoc h2 {
-    font-size: calc(var(--vp-code-font-size) * 2);
+    font-size: calc(var(--vp-code-font-size) * 1.9);
 }
 
 .VPDoc h3 {
-    font-size: calc(var(--vp-code-font-size) * 1.8);
+    font-size: calc(var(--vp-code-font-size) * 1.7);
 }
+
 .VPDoc h4 {
-    padding-top: 20px!important;
-    font-size: calc(var(--vp-code-font-size) * 1.5);
+    padding-top: 20px !important;
+    font-size: calc(var(--vp-code-font-size) * 1.4);
 }
-.VPDoc h4 a{
-    padding-top: 20px!important;
+
+.VPDoc h4 a {
+    padding-top: 20px !important;
 }
-.VPDoc h5{
-    padding-top: 20px!important;
-    font-size: calc(var(--vp-code-font-size) * 1.2);
+
+.VPDoc h5 {
+    padding-top: 20px !important;
+    font-size: calc(var(--vp-code-font-size) * 1.1);
 }
-.VPDoc h5 a{
-    padding-top: 20px!important;
+
+.VPDoc h5 a {
+    padding-top: 20px !important;
 }
 
 @media (max-width: 640px) {
     .VPHero.has-image .text {
         font-size: 25px;
     }
-    
+
     .VPHero.has-image .name {
-        font-size:50px;
+        font-size: 50px;
     }
 }
 
 @media (min-width: 1440px) {
     :root {
         --vp-layout-max-width: 100% !important;
+        --vp-code-font-size: 0.8rem !important;
         --vp-nav-logo-height: 80% !important
     }
 
@@ -91,20 +96,34 @@
         max-width: 960px !important;
     }
 
-    .VPDoc.has-aside .content {
+    /* ``标签字体大小 */
+    .VPDoc.has-aside .content p code {
         font-size: 13px;
-        padding-left: 20px;
     }
 
+     /* >标签字体大小 */
+     .VPDoc blockquote {
+        font-size: 13px;
+    }
+    
+    /* 侧边栏 */
+    .VPDoc.has-aside .content {
+        padding-left: 20px;
+    }
+     /* 侧边栏字体大小 */
+    .VPDoc.has-aside .content a{
+        font-size: 12px;
+    }
+    /* 正文字体大小 */
     .VPDoc.has-aside .content p {
-        font-size: 1rem;
+        font-size: 0.91rem;
     }
 }
 
-@media screen and (min-width: 1920px) {
+@media screen and (min-width: 1900px) {
     :root {
         --vp-layout-max-width: 95% !important;
-        --vp-code-font-size: 1rem !important;
+        --vp-code-font-size: 0.8rem !important;
     }
 
     .VPDoc.has-aside .content-container {
@@ -112,12 +131,31 @@
     }
 
     .VPDoc.has-aside .content {
-        font-size: 14px;
         padding-left: 20px;
     }
 
+    /* 侧边栏字体大小 */
+    .VPDoc.has-aside .content a{
+        font-size: 13px;
+    }
+
+    /* 正文字体大小 */
     .VPDoc.has-aside .content p {
-        font-size: 1.05rem;
+        font-size: 0.95rem;
+    }
+
+    /* 代码字体大小 */
+    .VPDoc.has-aside .content code {
+        font-size: 13px;
+    }
+    /* ``标签字体大小 */
+    .VPDoc.has-aside .content p code {
+        font-size: 14px;
+    }
+
+    /* >标签字体大小 */
+    .VPDoc blockquote {
+        font-size: 14px;
     }
 
     .VPDoc .aside {
