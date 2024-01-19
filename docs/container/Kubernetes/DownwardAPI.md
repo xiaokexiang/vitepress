@@ -9,7 +9,7 @@ sort: 60
 
 > Pod manifest是预先定义的数据，还有容器运行后才知道的数据，都交予downwardAPI进行暴露。
 
-DownwardAPI可以传递：`Pod名称`、`PodIP`、`容器Requests资源`、`Pod的标签`等。[点击此处查看更多参数]("https://kubernetes.io/zh-cn/docs/concepts/workloads/pods/downward-api/")
+DownwardAPI可以传递：`Pod名称`、`PodIP`、`容器Requests资源`、`Pod的标签`等。[点击此处查看更多参数](https://kubernetes.io/zh-cn/docs/concepts/workloads/pods/downward-api/)
 :::
 
 ### 基于环境变量暴露

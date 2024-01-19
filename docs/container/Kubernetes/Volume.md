@@ -371,7 +371,7 @@ spec:
 
 支持将NFS(网络文件系统)挂在到你的Pod中，nfs卷的内容在删除Pod时会被保存，卷只是被卸载。这意味着`nfs`卷可以被预先填充数据，并且这些数据可以在Pod之间共享。
 
-> 需要先安装[nfs-client-provisioner]("../StatefuleSet/nfs_volume.yaml")，一种自动配置卷程序，它使用现有的NFS服务来支持通过持久卷声明动态配置 Kubernetes 持久卷。
+> 需要先安装[nfs-client-provisioner](./nfs_volume.yaml)，一种自动配置卷程序，它使用现有的NFS服务来支持通过持久卷声明动态配置 Kubernetes 持久卷。
 
 ```yaml
 apiVersion: v1

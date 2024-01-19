@@ -77,13 +77,11 @@ export const set_sidebar = (arr) => {
     for (const item of arr) {
         const { subPath, text, collapsed = true, recursion = true } = item;
         if (!isDirectory(path.join(DIR_PATH, subPath))) {
-            console.error(`Directory '${key}' does not exist.`);
             continue;
         }
         const files = fs.readdirSync(path.join(DIR_PATH, subPath));
         const items = getList(files, path.join(DIR_PATH, subPath), subPath, recursion); // recursion: 是否需要递归读取文件夹下的文件夹
         res.push({ text, collapsed: collapsed, items });
     }
-    console.log(JSON.stringify(res))
     return res;
 };
