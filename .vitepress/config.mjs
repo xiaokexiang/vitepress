@@ -95,7 +95,7 @@ function nav() {
         },
         {
           text: '瞎折腾',
-          link: '/docs/other/raspberrypi'
+          link: '/docs/other/Raspberrypi'
         },
       ]
     }
@@ -112,7 +112,7 @@ function sidebar() {
     ]),
     '/docs/container': set_sidebar([
       { text: '容器', subPath: '/docs/container', collapsed: false, recursion: false },
-      { text: 'Kubernetes', subPath: '/docs/container/kubernetes', collapsed: true },
+      { text: 'Kubernetes', subPath: '/docs/container/Kubernetes', collapsed: true },
       { text: 'Istio', subPath: '/docs/container/istio', collapsed: true },
     ]),
     '/docs/go': set_sidebar([{ text: 'Go', subPath: '/docs/go', collapsed: false }]),
@@ -165,6 +165,14 @@ function head() {
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-LHP6XF8LVH');`
+    ],
+    [
+      'link',
+      { rel: 'preconnect', href: 'https://image.leejay.top', crossorigin: '' }
+    ],
+    [
+      'link',
+      { href: 'https://image.leejay.top/fonts/fonts.css', rel: 'stylesheet' },
     ]
   ]
 }

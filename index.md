@@ -12,7 +12,7 @@ hero:
   actions:
     - theme: brand
       text: Getting Started
-      link: /docs/java/base/grpc快速入门.md
+      link: /docs/java/base/知识零碎.md
     - theme: alt
       text: Github
       link: https://github.com/xiaokexiang
