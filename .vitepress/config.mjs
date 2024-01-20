@@ -4,6 +4,7 @@ import dracula from './theme/dracula.json'
 import slack from './theme/slack-ochin.json'
 import mathjax3 from 'markdown-it-mathjax3';
 import { withMermaid } from "vitepress-plugin-mermaid";
+import path from 'path'
 
 // https://vitepress.dev/reference/site-config
 export default withMermaid(
@@ -43,6 +44,13 @@ export default withMermaid(
     markdown: markdown(),
     mermaid: {
       theme: 'neutral'
+    },
+    vite: {
+      resolve: {
+        alias: {
+          '@': path.resolve(__dirname, './components') // custom component
+        }
+      }
     }
   })
 )
@@ -97,6 +105,10 @@ function nav() {
           text: '瞎折腾',
           link: '/docs/other/Raspberrypi'
         },
+        {
+          text: '思维导图',
+          link: '/docs/other/xmind/SpringBoot'
+        }
       ]
     }
   ]
@@ -123,7 +135,8 @@ function sidebar() {
     ]),
     '/docs/other': set_sidebar([
       { text: '瞎折腾', subPath: '/docs/other', collapsed: true ,recursion: false},
-      { text: '算法', subPath: '/docs/other/algorithm', collapsed: true }
+      { text: '算法', subPath: '/docs/other/algorithm', collapsed: true },
+      { text: '思维导图', subPath: '/docs/other/xmind', collapsed: true }
     ])
   }
 }
@@ -170,9 +183,5 @@ function head() {
       'link',
       { rel: 'preconnect', href: 'https://image.leejay.top', crossorigin: '' }
     ],
-    [
-      'link',
-      { href: 'https://image.leejay.top/fonts/fonts.css', rel: 'stylesheet' },
-    ]
   ]
 }

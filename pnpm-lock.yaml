@@ -26,6 +26,9 @@ dependencies:
   vitepress-plugin-mermaid:
     specifier: 2.0.10
     version: 2.0.10(mermaid@9.1.0)(vitepress@1.0.0-rc.39)
+  xmind-embed-viewer:
+    specifier: ^1.2.0
+    version: 1.2.0
 
 packages:
 
@@ -2001,6 +2004,10 @@ packages:
 
   /wicked-good-xpath@1.3.0:
     resolution: {integrity: sha512-Gd9+TUn5nXdwj/hFsPVx5cuHHiF5Bwuc30jZ4+ronF1qHK5O7HD0sgmXWSEgwKquT3ClLoKPVbO6qGwVwLzvAw==}
+    dev: false
+
+  /xmind-embed-viewer@1.2.0:
+    resolution: {integrity: sha512-dtsxbeePxhSy3g/Kyc4Oe1K3hfdCmkiyRtvONN2KZ2MqeL/QBFTvL4imCiXfAiLpincl42r87OOA3V3Shcza4A==}
     dev: false
 
   /xmldom-sre@0.1.31:

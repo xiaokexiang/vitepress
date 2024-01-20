@@ -8,6 +8,31 @@
     --vp-font-family-mono: 'Jetbrain Mono';
 }
 
+@font-face {
+    font-family: 'Jetbrain Mono';
+    src: url('https://image.leejay.top/fonts/JetBrainsMono-Light.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Jetbrain Mono';
+    src: url('https://image.leejay.top/fonts/JetBrainsMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+/* https://image.leejay.top/fonts/JetBrainsMono-SemiBold.ttf */
+@font-face {
+    font-family: 'Jetbrain Mono';
+    src: url('https://image.leejay.top/fonts/JetBrainsMono-SemiBold.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: block;
+}
+
 .VPDoc img {
     border-radius: 10px;
     /* 设置圆角半径，根据需要调整数值 */
