@@ -180,6 +180,18 @@ function head() {
       gtag('config', 'G-LHP6XF8LVH');`
     ],
     [
+      'script',
+      {}, `
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?24435097f2c98ce4cba6d697dc7bc297";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      `
+    ],
+    [
       'link',
       { rel: 'preconnect', href: 'https://image.leejay.top', crossorigin: '' }
     ],
