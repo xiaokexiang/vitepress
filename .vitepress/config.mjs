@@ -15,7 +15,7 @@ export default withMermaid(
     themeConfig: {
       logo: '/logo.gif',
       outline: {
-        label: "文章目录📝",
+        label: "页面导航",
         level: [2, 6]
       },
       lastUpdated: {
@@ -25,7 +25,9 @@ export default withMermaid(
           timeStyle: 'medium'
         }
       },
-      returnToTopLabel: "回到首页",
+      returnToTopLabel: "回到顶部🚀",
+      sidebarMenuLabel: "菜单",
+      darkModeSwitchLabel: "主题",
       docFooter: {
         prev: "上一篇",
         next: "下一篇"
@@ -50,6 +52,24 @@ export default withMermaid(
         alias: {
           '@': path.resolve(__dirname, './components') // custom component
         }
+      }
+    },
+    transformHead({ assets }) { // font preload
+      const myFontFile = assets.find(file => /font-name\.\w+\.ttf/)
+      console.log('123: ', myFontFile)
+      if (myFontFile) {
+        return [
+          [
+            'link',
+            {
+              rel: 'preload',
+              href: myFontFile,
+              as: 'font',
+              type: 'font/ttf',
+              crossorigin: ''
+            }
+          ]
+        ]
       }
     }
   })
@@ -134,7 +154,7 @@ function sidebar() {
       { text: 'Redis', subPath: '/docs/middleware/redis', collapsed: true }
     ]),
     '/docs/other': set_sidebar([
-      { text: '瞎折腾', subPath: '/docs/other', collapsed: true ,recursion: false},
+      { text: '瞎折腾', subPath: '/docs/other', collapsed: true, recursion: false },
       { text: '算法', subPath: '/docs/other/algorithm', collapsed: true },
       { text: '思维导图', subPath: '/docs/other/xmind', collapsed: true }
     ])
