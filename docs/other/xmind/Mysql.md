@@ -1,5 +1,2 @@
-<script setup>
-  import XmindViewer from '@/XmindViewer.vue'
-</script>
-
-<XmindViewer url="https://raw.githubusercontent.com/xiaokexiang/spring-dependencies/master/xmind/mysql/1. Mysql总览.xmind"/>
+# Mysql
+<iframe id="embed_dom" name="embed_dom" frameborder="0" style="width:100%; height:70vh;" src="https://www.processon.com/embed/5fd828067d9c0806f73501ad"></iframe>
