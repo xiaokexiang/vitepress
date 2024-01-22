@@ -17,70 +17,58 @@ const WHITE_LIST = [
 // 判断是否是文件夹
 const isDirectory = (path) => fs.existsSync(path) && fs.lstatSync(path).isDirectory();
 
-// 取差值
-const intersections = (arr1, arr2) =>
-    Array.from(new Set(arr1.filter((item) => !new Set(arr2).has(item))));
+function getList(params, path1, pathname, recursion, parentDirSort = {}) {
+    const folders = [];
+    const files = [];
 
-function getList(params, path1, pathname, recursion) {
-    // 存放结果
-    const res = [];
-    // 开始遍历params
     for (let file of params) {
-        // 拼接目录
         const dir = path.join(path1, file);
-        // 判断是否是文件夹
         const isDir = isDirectory(dir);
+
         if (recursion && isDir) {
-            // 如果是文件夹,读取之后作为下一次递归参数
-            const files = fs.readdirSync(dir);
-            res.push({
+            const dirSort = parentDirSort[file] || 0; // 使用传入参数的 dir_sort 进行排序
+            folders.push({
                 text: file,
                 collapsible: true,
-                items: getList(files, dir, `${pathname}/${file}`),
+                items: getList(fs.readdirSync(dir), dir, `${pathname}/${file}`, recursion, parentDirSort),
+                sort: dirSort,
             });
         } else {
-            // 获取名字
             const name = path.basename(file);
-            // 排除非 md 文件
             const suffix = path.extname(name);
-            if (suffix !== '.md') {
-                continue;
-            }
-            // 读取文件内容
-            const filePath = path.join(path1, file);
-            const content = fs.readFileSync(filePath, 'utf-8');
 
-            const frontmatter = matter(content)
-            const { sort = 100, publish = true } = frontmatter.data
-            if (publish) {
-                res.push({
-                    text: name,
-                    link: `${pathname}/${name}`,
-                    sort,
-                });
-            }
+            if (suffix === '.md') {
+                const filePath = path.join(path1, file);
+                const content = fs.readFileSync(filePath, 'utf-8');
+                const frontmatter = matter(content);
+                const { sort = 100, publish = true } = frontmatter.data;
 
+                if (publish) {
+                    files.push({
+                        text: name.replace(/\.md$/, ''),
+                        link: `${pathname}/${name}`,
+                        sort,
+                    });
+                }
+            }
         }
     }
-    // 对name做一下处理，把后缀删除
-    res.map((item) => {
-        item.text = item.text.replace(/\.md$/, '');
-    });
-    // 对结果按照 sort 字段排序
-    res.sort((a, b) => a.sort - b.sort);
-    return res;
-}
 
+    const allItems = folders.concat(files);
+    allItems.sort((a, b) => a.sort- b.sort); // 合并排序文件夹和文件的 sort 字段
+
+    return allItems;
+}
 
 export const set_sidebar = (arr) => {
     const res = [];
     for (const item of arr) {
-        const { subPath, text, collapsed = true, recursion = true } = item;
+        const { subPath, text, collapsed = true, recursion = true, dir_sort } = item;
         if (!isDirectory(path.join(DIR_PATH, subPath))) {
             continue;
         }
         const files = fs.readdirSync(path.join(DIR_PATH, subPath));
-        const items = getList(files, path.join(DIR_PATH, subPath), subPath, recursion); // recursion: 是否需要递归读取文件夹下的文件夹
+        const items = getList(files, path.join(DIR_PATH, subPath), subPath, recursion, dir_sort);
         res.push({ text, collapsed: collapsed, items });
     }
     return res;

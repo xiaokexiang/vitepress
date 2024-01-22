@@ -1,397 +1,7 @@
 ---
-sort: 30
+sort: 40
 ---
-# 实战
-需要先开启sidecar的自动注入或手动注入
-::: code-group
-```bash [自动注入]
-kubectl label namespace <your_namespace> istio-injection=enabled
-```
-``` bash [手动注入]
-kubectl apply -f <(istioctl kube-inject -f <yaml>) -n <namespace>
-```
-:::
-
-##  对等认证
-
-###  未开启mTLS认证
-
-```bash
-$ cat <<EOF> ./sleep.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: sleep
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: sleep
-  namespace: test
-  labels:
-    app: sleep
-spec:
-  ports:
-    - port: 80
-      name: http
-  selector:
-    app: sleep
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: sleep
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: sleep
-  template:
-    metadata:
-      labels:
-        app: sleep
-    spec:
-      terminationGracePeriodSeconds: 0
-      serviceAccountName: sleep
-      containers:
-        - name: sleep
-          image: curlimages/curl
-          command: ["/bin/sleep", "infinity"]
-          imagePullPolicy: IfNotPresent
-EOF
-$ cat <<EOF> ./httpbin.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: httpbin
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: httpbin
-  labels:
-    app: httpbin
-    service: httpbin
-spec:
-  ports:
-    - name: http
-      port: 8000
-      targetPort: 80
-  selector:
-    app: httpbin
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: httpbin
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: httpbin
-      version: v1
-  template:
-    metadata:
-      labels:
-        app: httpbin
-        version: v1
-    spec:
-      serviceAccountName: httpbin
-      containers:
-        - image: docker.io/kong/httpbin
-          imagePullPolicy: IfNotPresent
-          name: httpbin
-          ports:
-            - containerPort: 80
-EOF
-$ kubectl apply -f <(istioctl kube-inject -f ./httpbin.yaml) -n test
-$ kubectl apply -f <(istioctl kube-inject -f ./sleep.yaml) -n test
-$ kubectl apply -f <(istioctl kube-inject -f ./sleep.yaml)
-# 从default下的sleep发起http请求（没有注入envoy代理）
-$ kubectl exec -it $(kubectl get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl http://httpbin.test:8000/ip
-{
-  "origin": "127.0.0.6"
-}
-# 从test下的sleep发起http请求
-$ kubectl -n test exec -it $(kubectl -n test get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl http://httpbin.test:8000/ip
-{
-  "origin": "127.0.0.6"
-}
-```
-
-> - 分别创建没有代理的sleep服务，有代理的sleep服务以及有代理的httpbin服务。两个sleep都能访问httpbin的服务。
-
-###  开启mTLS认证
-
-```bash
-$ cat <<EOF | kubectl apply -f -
-apiVersion: security.istio.io/v1beta1
-kind: PeerAuthentication
-metadata:
-  name: peer-policy
-  namespace: test
-spec:
-  mtls:
-    mode: STRICT
-EOF
-$ kubectl exec -it $(kubectl get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl http://httpbin.test:8000/ip
-curl: (56) Recv failure: Connection reset by peer
-command terminated with exit code 56
-$ kubectl -n test exec -it $(kubectl -n test get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl http://httpbin.test:8000/ip
-{
-  "origin": "127.0.0.6"
-}
-```
-
-> - 创建`对等认证`规则，匹配namespace: test下的所有服务（因为没有定义selector），策略为`STRICT(所有服务都要求mTLS访问)`。
-> - 对等认证开启后，`没有代理的sleep服务无法访问httpbin服务`，而具有代理的sleep服务则可以访问。
-
-##  请求认证
-
-```bash
-$ cat <<EOF | kubectl apply -f -
-apiVersion: security.istio.io/v1
-kind: RequestAuthentication
-metadata:
-  name: jwt-example
-  namespace: istio-system
-spec:
-  selector:
-    matchLabels:
-      istio: ingressgateway # 绑定istio的ingressgateway网关
-  jwtRules:
-    - issuer: "xiaokexiang@aliyun.com" # 指定访问的issuer
-      jwks: | # 对应jwt的公钥
-        {
-          "keys": [
-            {
-              "alg": "RS256",
-              "use": "sig",
-              "e": "AQAB",
-              "kty": "RSA",
-              "n": "32j3q4FvIorhQLSvj4woX_-U-rNTMnWU351L_Cg3Nk2cgIf96fyXQDa31hoJUf6EvHxoaDZq5b93UKfL1cerbOmkWBKjBYwb9LxKvbMJeq6nXBGq3X9tgFrhj4GDY_uthUBpmTQzCNF8pc_JrlsxT7Qz9dukvoVHH8nZrjcEOqlOa3eGQ69IkJVj0Si8tTdRmZ-epIhn71dhBp3mPobTf9eVeVx2Ci0elcuLlJpDylwPfLk-dtkCEgp8Ij5GBbXcRY5K4zo_uVa-TisVSbjF06T62wZQvytMzTr3N3CvgMZsaGzcHTSw9TXXA7DWDHlw7NFo7PJrzTnPLZtuR9ilZQ"
-            }
-          ]
-        }
-EOF
-# token由jwt工具生成
-$ curl --header "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDQ0MjUzODMsImlzcyI6InhpYW9rZXhpYW5nQGdtYWlsLmNvbSIsInN1YiI6InRlc3Qgand0In0.hF3-hX9p_zKZXLxGwhB-vTBS9K2IhjGLj1b98VDyLjTqk5y3Rsy5TdIzvkP_ma-DH53tvXGOXjd-jn1O3P_91wV3Lgz90dZpw4ha7kRYaafMbkTZgfN986mftXqlz49JujClwLMqkiiMRGQE72HD8SpUCn4LmYxuaETeG1iF1Tz4GHe8eI4om-VqRznclbDU5FxCuDGyCsneU8_ZEaNbv0KLgZwfwwr0HSCvIs4t3QcSqWR7l8hs6MH5d1_ZOiQ3vePhX4kAo7d-eA3xMPfIfj5LQ-PLWuSqB5ToRz1FrbVVa8Fx_AJdsQGOdjq1Ws6kMKyIl65plOPkp4LWrWd8xA" $INGRESS_HOST:$INGRESS_PORT/ip
-{
-  "origin": "10.244.0.1"
-}
-```
-
-> - jwks和jwksUri两者只能二选其一，前者表示文本，后者指向一个文本地址。
-> - 使用[jwt令牌生成工具](https://github.com/xiaokexiang/jwt-tooos)生成公私钥、令牌和jwks配置，也可以使用[jwt在线令牌验证](https://jwt.io/)来验证令牌是否合法。
->
-> ```bash
-> # 生成公私钥
-> $ ./jwt cert
-> # 这个名称就是ra的yaml中指定的名字，不匹配会无法访问
-> $ ./jwt enc --iss=xiaokexiang@aliyun.com
-> # 生成jwk配置，其实对应着公钥
-> $ ./jwt jwk
-> ```
->
-> - 如果禁止不携带令牌也能访问的情况，需要配置`AuthorizationPolicy`:
->
-> ```bash
-> $ cat <<EOF | kubectl apply -f -
-> apiVersion: security.istio.io/v1
-> kind: AuthorizationPolicy
-> metadata:
->  name: refuse-without-token
->  namespace: istio-system
-> spec:
->  selector:
->    matchLabels:
->      istio: ingressgateway
->  action: DENY
->  rules:
->  - from:
->    - source:
->        notRequestPrincipals: ["*"] # 表示不携带请求主题
->    to:
->    - operation:
->        path: ["/headers"] # header请求不携带token会拒绝访问
->        methods: ["GET"]
-> EOF
-> $ curl $INGRESS_HOST:$INGRESS_PORT/ip
-> {
->   "origin": "10.244.0.1"
-> }
-> $ curl $INGRESS_HOST:$INGRESS_PORT/headers
-> RBAC: access denied
-> ```
-
-###  复制JWT声明到HTTP头
-
-```bash
-$ cat <<EOF | kubectl apply -f -
-apiVersion: security.istio.io/v1
-kind: RequestAuthentication
-metadata:
-  name: "jwt-example"
-  namespace: test
-spec:
-  selector:
-    matchLabels:
-      app: httpbin # 绑定httpbin服务
-  jwtRules:
-    - issuer: "xiaokexiang@aliyun.com"
-      outputClaimToHeaders:
-        - header: "X-Jwt-Claim-Sub" # 输出的请求头key
-          claim: "sub" # 值从jwt的payload的sub获取
-      jwks: |
-        {
-          "keys": [
-            {
-              "alg": "RS256",
-              "e": "AQAB",
-              "kty": "RSA",
-              "n": "xoEooXKh6JNK0KefERE-F8_pGOdFV5bCSqluLSUWeFNEarxSK_WoGjxGbr6qSJOG4RB5xqw7fOutFGGbAh2bDdyjAwZ9d271Ga_9SJCl5_VU4miNYu7VUvqGb_wBhclhRxEOQ7BE1q9YT_HTWJSDzXHFgVM_nULhYaesxhqnfmyybNM3oj30iAXAlY4fc0waQuUlH9YWacp7VByyF-cBvCIyJeU4w_PPBtrbE-67Zjadh1VL7Mvobl7PG50rOKiztVyvaIBV1arc2Jm86Jh5puVPDWd8mtv-Qc-khvtfJ4A-CVl61tmqtDxQDqDYKc8HRyG5X6X7KosNpZTYe-SzoQ",
-              "use": "sig"
-            }
-          ]
-        }
-EOF
-# 发起服务间访问
-$ curl -sS -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDQ0NDA2MDEsImlzcyI6InhpYW9rZXhpYW5nQGFsaXl1bi5jb20iLCJzdWIiOiJ0ZXN0IGp3dCJ9.f_qFd1pmLBqxcWLbE0MSr98UCUebqMuTvgELENPPiDaQ0blxEJRwaXKMVgpzp9GN364IbqJRTBEUVZiXk8gkduVwWtlHTVdm6PSkADgRgk4A31u1nJHFoqoCz-21Vj8zatSCz17YlOeHZYcu8xOk0fqt6M_CzLyyJF5gS-MdjRwoTuK59aTE41goG_7tXrikQ748zSblrOmZ9noCpf_GcvRkS0yQLIz1iWcyZdRtdXkxXjXSBGL976a_OUR6kjurCKSGHTB-0o2LXNXmuxGGfHBoLcdUANv5b6VrLEpxgjHGWXMkZzegNKCtun8SK7I6I73f4qMC15DaUmAGqX7hyA" http://httpbin:8000/headers
-
-{
-  "headers": {
-    "Accept": "*/*", 
-    "Host": "httpbin:8000", 
-    "User-Agent": "curl/8.5.0", 
-    "X-B3-Parentspanid": "aaacd10302294880", 
-    "X-B3-Sampled": "0", 
-    "X-B3-Spanid": "58851ef0c8fdb761", 
-    "X-B3-Traceid": "74b2866e38744d1baaacd10302294880", 
-    "X-Envoy-Attempt-Count": "1", 
-    "X-Forwarded-Client-Cert": "By=spiffe://cluster.local/ns/test/sa/httpbin;Hash=63ff1d19edabef26b6f6aed355290fdca82900a64750cc46b0995ad11d549c44;Subject=\"\";URI=spiffe://cluster.local/ns/test/sa/sleep", 
-    "X-Jwt-Claim-Sub": "test jwt"
-  }
-}
-```
-
-> sleep向httpbin发起服务间的请求时，httpbin服务接收的请求头中包含`"X-Jwt-Claim-Foo": "test jwt"`。
-
-##  授权
-
-###  HTTP流量
-
-结合上文test下的sleep和httpbin服务，对httpbin服务的访问进行控制。
-
-```bash
-# 先开启ns下的mTLS，防止部分参数不起作用
-$ cat <<EOF | kubectl apply -f -
-apiVersion: security.istio.io/v1beta1
-kind: PeerAuthentication
-metadata:
-  name: peer-policy
-  namespace: test
-spec:
-  mtls:
-    mode: STRICT
-EOF
-# 先默认deny-all
-$ cat <<EOF | kubectl apply -f -
-apiVersion: security.istio.io/v1
-kind: AuthorizationPolicy
-metadata:
-  name: allow-nothing
-  namespace: test
-spec:
-  action: ALLOW
-EOF
-# 同ns的服务间的访问被拒绝   
-$ kubectl -n test exec -it $(kubectl -n test get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl http://httpbin.test:8000/ip
-# 跨ns的服务间访问被拒绝
-$ kubectl -n default exec -it $(kubectl -n default get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl http://httpbin.test:8000/ip
-# 集群内部通过入口网关的流量被拒绝
-$ kubectl -n test exec -it $(kubectl -n test get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl --resolve "httpbin.example.com:30001:10.50.8.88" httpbin.example.com:30001/ip
-# 集群外部通过入口网关的流量被拒绝
-$ curl --resolve "httpbin.example.com:30001:10.50.8.88" httpbin.example.com:30001/ip
-```
-
-- 指定授权策略: 同ns下的sleep服务访问httpbin的ip接口且`携带请求头version：v1`则可以访问
-
-```bash
-$ cat <<EOF | kubectl apply -f -
-apiVersion: security.istio.io/v1
-kind: AuthorizationPolicy
-metadata:
-  name: allow-ns-test
-  namespace: test
-spec:
-  selector:
-    matchLabels:
-      app: httpbin # 绑定test下的httpbin服务
-  action: ALLOW
-  rules:
-    - from:
-        - source:
-            principals: ["cluster.local/ns/test/sa/sleep"] # 拒绝了跨ns的访问
-      to:
-        - operation:
-            paths: [ "/ip" ] # 拒绝了非ip接口的访问
-            methods: [ "GET" ]
-      when:
-        - key: request.headers[version] # 只有在请求头携带version且值为v1的时候规则才会生效
-          values: ["v1"]
-EOF
-# 同ns服务间的访问不携带请求头被拒绝   
-$ kubectl -n test exec -it $(kubectl -n test get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl http://httpbin.test:8000/ip
-# 同ns服务间的访问携带请求头不会被拒绝
-$ kubectl -n test exec -it $(kubectl -n test get po -l app=sleep -o jsonpath={.items[0].mleep -- curl -H "version: v1" http://httpbin.test:8000/ip
-# 跨ns服务间的访问被拒绝
-$ kubectl -n default exec -it $(kubectl -n default get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl http://httpbin.test:8000/ip
-# 集群内部通过入口网关的流量被拒绝
-$ kubectl -n test exec -it $(kubectl -n test get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl --resolve "httpbin.example.com:30001:10.50.8.88" httpbin.example.com:30001/ip
-# 集群外部通过入口网关的流量被拒绝
-$ curl --resolve "httpbin.example.com:30001:10.50.8.88" httpbin.example.com:30001/ip
-```
-
-- 指定授权策略：集群外部的流量访问ip需要token验证且只能访问，服务间的访问则没有限制
-
-```bash
-# 删除原来的授权条件
-$ kubectl -n test delete authorizationpolicy allow-nothing allow-ns-test
-$ cat <<EOF | kubectl apply -f -
-apiVersion: security.istio.io/v1
-kind: AuthorizationPolicy
-metadata:
-  name: allow-ingressgateway
-  namespace: istio-system
-spec:
-  selector:
-    matchLabels:
-      app: istio-ingressgateway # 绑定集群流量入口网关
-  action: ALLOW
-  rules:
-    - from:
-        - source:
-            notRequestPrincipals: ["*"]
-      to:
-        - operation:
-            paths: [ "/ip" ] # 指定访问接口
-            methods: [ "GET" ]
-EOF
-# 同ns的服务间的访问被拒绝   
-$ kubectl -n test exec -it $(kubectl -n test get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl http://httpbin.test:8000/ip
-# 跨ns的服务间访问被拒绝
-$ kubectl -n default exec -it $(kubectl -n default get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl http://httpbin.test:8000/ip
-# 集群内部通过入口网关的流量被拒绝
-$ kubectl -n test exec -it $(kubectl -n test get po -l app=sleep -o jsonpath={.items[0].metadata.name}) -c sleep -- curl --resolve "httpbin.example.com:30001:10.50.8.88" httpbin.example.com:30001/ip
-# 集群外部通过入口网关的流量被拒绝
-$ curl --resolve "httpbin.example.com:30001:10.50.8.88" httpbin.example.com:30001/ip
-```
-
-###  TCP流量
-
-
-
-
+# TLS网关
 
 ##  TLS多主机网关
 
@@ -471,7 +81,7 @@ $ kubectl create -n istio-system secret tls helloworld-secret \
 
 ```bash
 # 创建基于httpbin和helloworld的deploy&svc
-$ cat <<EOF | kubectl -n test apply -f -
+$ kubectl -n test apply -f - <<EOF
 apiVersion: v1
 kind: Service
 metadata:
@@ -570,7 +180,7 @@ EOF
 ###  配置网关和虚拟服务
 
 ```bash
-$ cat <<EOF | kubectl -n test apply -f -
+$ kubectl -n test apply -f - <<EOF
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
@@ -729,7 +339,7 @@ $ kubectl create -n istio-system secret generic httpbin-mutual-secret \
 ###  配置网关和虚拟服务
 
 ```bash
-$ cat <<EOF | kubectl -n test apply -f -
+$ kubectl -n test apply -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
@@ -800,7 +410,7 @@ $ kubectl -n test create configmap nginx-tls-config \
 ###  配置服务和Service
 
 ```bash
-$ cat <<EOF | kubectl -n test apply -f -
+$ kubectl -n test apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -889,7 +499,7 @@ EOF
 ###  配置网关和虚拟服务
 
 ```bash
-$ cat <<EOF | kubectl -n test apply -f -
+$ kubectl -n test apply -f - <<EOF
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:

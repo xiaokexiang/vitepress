@@ -144,14 +144,14 @@ function sidebar() {
     ]),
     '/docs/container': set_sidebar([
       { text: '容器', subPath: '/docs/container', collapsed: false, recursion: false },
-      { text: 'Kubernetes', subPath: '/docs/container/Kubernetes', collapsed: true },
-      { text: 'Istio', subPath: '/docs/container/istio', collapsed: true },
+      { text: 'Istio', subPath: '/docs/container/istio', collapsed: false, dir_sort: { "实战": 40 } },
+      { text: 'Kubernetes', subPath: '/docs/container/kubernetes', collapsed: true, dir_sort: { "Workload": 35, "Service": 40 } },
     ]),
     '/docs/go': set_sidebar([{ text: 'Go', subPath: '/docs/go', collapsed: false }]),
     '/docs/middleware': set_sidebar([
       { text: 'Elasticsearch', subPath: '/docs/middleware/elasticsearch', collapsed: false },
       { text: 'Mysql', subPath: '/docs/middleware/mysql', collapsed: true },
-      { text: 'Redis', subPath: '/docs/middleware/redis', collapsed: true }
+      { text: 'Redis', subPath: '/docs/middleware/redis', collapsed: true, dir_sort: { "基本数据类型": 20 } }
     ]),
     '/docs/other': set_sidebar([
       { text: '瞎折腾', subPath: '/docs/other', collapsed: true, recursion: false },
