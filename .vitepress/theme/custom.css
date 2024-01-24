@@ -4,6 +4,7 @@
     --vp-code-font-size: 0.9rem;
     /* 全局字体大小 */
     --vp-nav-logo-height: 45px;
+    --vp-sidebar-width: 256px;
     --vp-font-family-base: 'Jetbrain Mono';
     --vp-font-family-mono: 'Jetbrain Mono';
 }
@@ -71,7 +72,7 @@
 }
 
 /* tip mathjax公式超长 */
-.VPDoc .vp-doc .custom-block {
+.VPDoc .custom-block {
     overflow: auto !important;
 }
 
@@ -106,6 +107,10 @@
         font-size: 15px;
     }
 
+    .VPDoc blockquote p {
+        margin: 5px 0;
+    }
+
     /* - 开头的字体 */
     .VPDoc blockquote li {
         font-size: 14px;
@@ -129,12 +134,12 @@
 
 @media screen and (min-width: 1900px) {
     :root {
-        --vp-layout-max-width: 95% !important;
-        --vp-code-font-size: 0.8rem !important;
+        --vp-layout-max-width: 98%;
+        --vp-code-font-size: 0.9rem !important;
     }
 
     .VPDoc.has-aside .content-container {
-        max-width: 1280px !important;
+        max-width: 1180px !important;
     }
 
     .VPDoc.has-aside .content {
@@ -153,7 +158,7 @@
 
     /* 代码字体大小 */
     .VPDoc.has-aside .content code {
-        font-size: 13px;
+        font-size: 15px;
     }
 
     /* ``标签字体大小 */
@@ -166,8 +171,11 @@
         font-size: 14px;
     }
 
+    .VPDoc blockquote p {
+        margin: 5px 0;
+    }
+
     .VPDoc .aside {
-        padding-left: 30px !important;
-        width: 250px;
+        width: 300px;
     }
 }
