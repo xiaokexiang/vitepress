@@ -5,3 +5,4 @@
 - 支持回到顶部
 - xmind在线预览
 - 支持mathjs和mermaid
+- 图片缩放功能
