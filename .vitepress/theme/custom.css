@@ -191,3 +191,31 @@
 .medium-zoom--opened .medium-zoom-overlay {
     opacity: 0.9 !important;
 }
+/* markdown文字不换行 */
+.VPDoc td {
+    white-space: nowrap;
+}
+/* > 样式优化 */
+.VPDoc blockquote {
+    border: 1px solid rgb(246 246 247);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.VPDoc blockquote::before {
+    content: url('/double_quotes.svg');
+    margin-left: 10px;
+}
+.VPDoc blockquote ul {
+    margin: 5px 0;
+}
+
+.VPDoc blockquote p {
+    padding-left: 10px;
+}
+/* 代码框样式 */
+.VPDoc .vp-block {
+    border: 1px solid rgb(246 246 247);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
