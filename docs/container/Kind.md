@@ -5,7 +5,8 @@ sort: 20
 
 ::: warning
 [kind](https://kind.sigs.k8s.io)（Kubernetes in Docker）是一个用于在本地机器上创建 Kubernetes 集群的工具。它使用 Docker 容器来模拟真实的 Kubernetes 节点，允许你在单个机器上轻松创建和管理 Kubernetes 环境。
-> kind只适合本地开发和测试使用，不推荐`生产使用`。
+
+kind只适合本地开发和测试使用，不推荐`生产使用`。
 :::
 
 
