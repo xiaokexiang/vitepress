@@ -208,7 +208,11 @@
     margin-left: 10px;
 }
 .VPDoc blockquote ul {
-    margin: 5px 0;
+    margin-left: 5px;
+}
+
+.VPDoc blockquote ol {
+    margin-left: 15px;
 }
 
 .VPDoc blockquote p {
