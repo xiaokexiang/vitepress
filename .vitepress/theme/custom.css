@@ -205,14 +205,15 @@
 
 .VPDoc blockquote::before {
     content: url('/double_quotes.svg');
+    display: inline-block;
     margin-left: 10px;
 }
 .VPDoc blockquote ul {
-    margin-left: 5px;
+    margin: 1px 0 0 5px;
 }
 
 .VPDoc blockquote ol {
-    margin-left: 15px;
+    margin: 1px 0 0 15px;
 }
 
 .VPDoc blockquote p {
