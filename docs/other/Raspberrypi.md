@@ -4,7 +4,7 @@ lastUpdated: "2023-03-17T15:43:00+08:00"
 ---
 # 树莓派
 
-## 前置工作
+## ubuntu
 
 ### 安装系统
 
@@ -85,7 +85,77 @@ apt install linux-modules-extra-raspi
 apt install raspi-config
 ```
 
-## 树莓派软件安装
+## istoreos
+
+### 安装
+
+参照[官网文档](https://doc.linkease.com/zh/guide/istoreos/install_rpi4.html)将系统刷入SD卡中，并启动机器，通过网线与树莓派连接，修改电脑网卡的IP设置为如下
+
+![image-20240214102323273](https://image.leejay.top/typora/image-20240214102323273.png?imgslim)
+
+修改后浏览器访问192.168.100.1，能够正常响应说明系统刷写成功。
+
+### 修改静态IP
+
+访问`http://192.168.100.1/cgi-bin/luci/admin/network`，对网卡进行编辑，修改为`静态地址`，并设置子网掩码和网关。
+
+![image-20240214102649483](https://image.leejay.top/typora/image-20240214102649483.png?imgslim)
+
+确认并保存后，将本机的IPV4设置改为自动，并再次访问`192.168.10.100`查看是否能够成功访问。
+
+### 调节根目录空间大小
+
+系统中根目录默认空间大小约2G，其中包含了opkg的软件包和docker的目录，所以需要调节根目录大小，避免后续空间不足带来的问题。
+
+```bash
+$ parted
+$ print                                                            
+```
+
+目前SD卡的磁盘分区如下
+
+```bash
+Number  Start   End     Size    Type     File system  Flags
+ 1      4194kB  71.3MB  67.1MB  primary  fat16        boot, lba
+ 2      75.5MB  344MB   268MB   primary
+ 3      348MB   2496MB  2147MB  primary  ext4
+```
+
+我们需要调节Number 3，即分区为`/dev/mmcblk0p3`的分区
+
+```bash
+$ resizepart 3
+$ YES
+$ 25G
+$ quit
+$ resize2fs -p /dev/mmcblk0p3
+```
+
+确认根目录是否扩容成功
+
+```bash
+$ df -h /
+Filesystem                Size      Used Available Use% Mounted on
+overlayfs:/overlay       22.5G      1.0M     22.5G   0% /
+```
+
+SD卡还剩余约30G的空间，我准备新增分区，用作docker的存储目录。打开后台首页-磁盘信息-系统根目录，点击右侧的三个点，点击分区并格式化。
+
+![image-20240214113716033](https://image.leejay.top/typora/image-20240214113716033.png?imgslim)
+
+后台首页-Docker-快速配置，将原来的docker迁移到格式化后的/dev/mmcblk0p4分区
+
+![image-20240214114603185](https://image.leejay.top/typora/image-20240214114603185.png?imgslim)
+
+### PassWall
+
+```bash
+$ wget -O passwall https://raw.githubusercontent.com/AUK9527/Are-u-ok/main/apps/all/PassWall_4.72-2_aarch64_a53_all_sdk_22.03.6.run && chmod +x passwall && ./passwall
+```
+
+![image-20240214120930521](https://image.leejay.top/typora/image-20240214120930521.png?imgslim)
+
+## 软件安装
 
 ### oh-my-zsh
 
@@ -147,7 +217,7 @@ systemctl enable {服务名称}
 ### frpc-docker
 
 ```bash
-docker run \
+$ docker run \
 -d --restart=always \
 --name=frpc-web \
 --pull=always \
@@ -155,7 +225,7 @@ registry.cn-hongkong.aliyuncs.com/natfrp/frpc \
 -f 账户密钥:隧道id --remote_control 远程密码
 ```
 
-### TFOLED
+### tfoled
 
 ```bash
 # 编辑TFOLED服务
@@ -178,13 +248,38 @@ systemctl start tfoled.service
 systemctl enable tfoled.service
 ```
 
-### TFOLED-docker
+### docker
 
 ```bash
-docker run -itd --name tfoled \
+# 安装证书
+$ apt install apt-transport-https ca-certificates curl software-properties-common gnupg lsb-release
+# 安装密钥
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+# 添加官方库
+$ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+# 安装docker
+$ apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+# 修改镜像源
+$ curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
+```
+
+### tfoled-docker
+
+```bash
+# 安装依赖包
+$ opkg update
+$ opkg install i2c-tools kmod-i2c-gpio kmod-i2c-algo-bit kmod-i2c-algo-pcf kmod-i2c-bcm2835 kmod-i2c-core kmod-i2c-gpio kmod-i2c-mux python3-smbus
+# 修改配置
+$ echo "dtparam=i2c_arm=on
+dtparam=i2c0=on
+dtparam=i2c1=on
+dtparam=spi=on
+dtparam=i2s=on" >> /boot/config.txt
+# 重启后执行
+$ docker run -itd --name tfoled \
    --privileged \
    --restart=always \
-   --name tfoled
+   --name tfoled \
    --net=host \
    -v ${mount_path}:/data \ # 将需要统计的磁盘挂在到/data目录
    -e upper=40  \ # 风扇启动的温度，不填默认45
@@ -192,26 +287,11 @@ docker run -itd --name tfoled \
    -d xiaokexiang/alpine-tfoled
 ```
 
-### docker
-
-```bash
-# 安装证书
-apt install apt-transport-https ca-certificates curl software-properties-common gnupg lsb-release
-# 安装密钥
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-# 添加官方库
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-# 安装docker
-apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-# 修改镜像源
-curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
-```
-
 ### homeassistant
 
 ```bash
 # 安装homeassistant
-docker run -d \
+$ docker run -d \
   --name homeassistant \
   --privileged \
   --restart=unless-stopped \
@@ -223,7 +303,7 @@ docker run -d \
 wget -q -O - https://install.hacs.xyz | bash -
 ```
 
-### jd
+### qinglong
 
 ```bash
 docker run -itd --name jd \
@@ -295,3 +375,40 @@ docker run -it \
 pjoc/docker-icloudpd:master
 ```
 > 启动成功后，进入容器执行`sync-icloud.sh`脚本，用来手动登陆icloud，登陆成功后重启容器即可。
+
+### zerotier
+
+```bash
+$ docker run --device=/dev/net/tun \
+--name zerotier-one \
+--net=host \
+--restart=always \
+--cap-add=NET_ADMIN \
+--cap-add=SYS_ADMIN \
+-v /root/conf/zerotier:/var/lib/zerotier-one \
+bltavares/zerotier:latest
+$ docker exec zerotier-one zerotier-cli join <network id>
+```
+
+### qinglong
+
+```bash
+$ docker run -d \
+  -v /root/conf/qinglong:/ql/data \
+  -p 5700:5700 \
+  --name qinglong \
+  --restart unless-stopped \
+  whyour/qinglong:2.17
+```
+
+### immich_upload
+
+```bash
+$ docker run -d \
+--name immich_upload \
+-e INSTANCE_URL=<INSTANCE_URL> \
+-e API_KEY=<API_KEY> \
+-e CRON=<CRON> \
+-v <UPLOAD_DIR>:/home
+xiaokexiang/immich_upload:latest
+```
