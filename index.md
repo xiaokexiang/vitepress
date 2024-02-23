@@ -12,7 +12,7 @@ hero:
   actions:
     - theme: brand
       text: Getting Started
-      link: /docs/java/base/知识零碎.md
+      link: /docs/other/照片浏览与备份.md
     - theme: alt
       text: Github
       link: https://github.com/xiaokexiang

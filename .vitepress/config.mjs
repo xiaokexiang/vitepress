@@ -123,7 +123,7 @@ function nav() {
         },
         {
           text: '瞎折腾',
-          link: '/docs/other/Raspberrypi'
+          link: '/docs/other/照片浏览与备份'
         },
         {
           text: '思维导图',

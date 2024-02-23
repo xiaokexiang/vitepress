@@ -36,8 +36,7 @@ $ openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -subj '/O=example 
 
 ```bash[httpbin.example.com]
 # 生成证书httpbin.example.com和私钥
-$ openssl req -out example_certs1/httpbin.example.com.csr -newkey rsa:2048 -nodes -keyout
-example_certs1/httpbin.example.com.key -subj "/CN=httpbin.example.com/O=httpbin organization"
+$ openssl req -out example_certs1/httpbin.example.com.csr -newkey rsa:2048 -nodes -keyout example_certs1/httpbin.example.com.key -subj "/CN=httpbin.example.com/O=httpbin organization"
 $ openssl x509 -req -sha256 -days 365 -CA example_certs1/example.com.crt -CAkey example_certs1/example.com.key -set_serial 0 -in example_certs1/httpbin.example.com.csr -out example_certs1/httpbin.example.com.crt
 ```
 
