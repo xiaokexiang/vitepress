@@ -203,3 +203,96 @@ docker run -it --name nginx \
 -d nginx
 ```
 > nginx的配置文件可以通过`nginx -t`来进行校验。
+
+## 多平台镜像构建
+
+利用docke的buildx插件实现多平台结构镜像的构建，使用前提：`内核版本 >= 4.8 & docker >= 19.03`。
+
+### 定义构建器配置
+
+```bash
+$ cat <<EOF > config.toml
+[registry."docker.io"] # 配置docker.io的镜像代理
+  mirrors = ["hub-mirrors.c.163.com"]
+[registry."abcsys.cn:5000"] # 配置自定义仓库的代理、支持insecure推送（私有仓库必备）
+  mirrors = ["abcsys.cn:5000"]
+  http = true
+  insecure = true
+[registry."jenkins.oem"]
+  mirrors = ["jenkins.oem"]
+  http = true
+  insecure = true
+EOF
+```
+### 创建构建器
+
+```bash
+# 查看已经存在的构建器
+$ docker buildx ls
+# 删除构建器
+$ docker buildx rm -f custom-builder
+# 创建构建器（会同步基于moby/buildkit的容器镜像），并将宿主机的host映射到这个容器中（私有仓库必备）
+$ docker buildx create --use --name custom-builder --config=./config.toml --driver-opt network=host --buildkitd-flags '--allow-insecure-entitlement network.host'
+# 将custom-builder作为默认构建器
+$ docker buildx use custom-builder
+# 启动构建器
+$ docker buildx inspect --bootstrap custom-builder
+```
+### 构建多架构镜像
+基于下面的命令创建所需文件：
+:::code-group
+```bash[Dockerfile]
+# 定义相关文件，用于展示容器所在系统的架构
+$ cat <<EOF> Dockerfile
+FROM golang AS builder
+WORKDIR /app
+ADD . .
+RUN go build -o hello .
+FROM alpine
+WORKDIR /app
+COPY --from=builder /app/hello .
+CMD ["./hello"]
+EOF
+```
+```bash[main.go]
+$ cat <<EOF> main.go
+package main
+
+import (
+    "fmt"
+    "runtime"
+)
+
+func main() {
+    fmt.Printf("Hello, %s/%s!\n", runtime.GOOS, runtime.GOARCH)
+}
+EOF
+```
+```bash[go.mod]
+$ cat <<EOF> go.mod
+module hello
+go 1.20
+EOF
+```
+:::
+构建amd64和arm64双架构镜像
+```bash
+# 构建amd和arm架构镜像并推送，因为默认是构建在缓存中的
+$ docker buildx build --platform linux/arm64,linux/amd64 -t abcsys.cn:5000/public/hello-go . --push
+```
+查看远程仓库的镜像manifest信息
+```bash
+$ docker buildx imagetools inspect abcsys.cn:5000/public/hello-go
+# Name:      abcsys.cn:5000/public/hello-go:latest
+# MediaType: application/vnd.docker.distribution.manifest.list.v2+json
+# Digest:    sha256:faf291d4054f0e1958b77fc45786e18725e0180bf67a801dc1e1531dab430c0a
+           
+# Manifests: 
+#  Name:      abcsys.cn:5000/public/hello-go:latest@sha256:893411d11003ed93665b2c383400600d0bf0ea40c29f23e958d8932d3b3b4b89
+#  MediaType: application/vnd.docker.distribution.manifest.v2+json
+#  Platform:  linux/arm64 # [!code warning]
+             
+#  Name:      abcsys.cn:5000/public/hello-go:latest@sha256:860abc41643953f466ccc3c38fc4b927793039b188dcc9882794ac58583474e2
+#  MediaType: application/vnd.docker.distribution.manifest.v2+json
+#  Platform:  linux/amd64 # [!code warning]
+```
