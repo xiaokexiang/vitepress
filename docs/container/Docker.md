@@ -204,6 +204,17 @@ docker run -it --name nginx \
 ```
 > nginx的配置文件可以通过`nginx -t`来进行校验。
 
+### kafka
+
+```bash
+# zookeeper
+docker run -d --name zookeeper -p 2181:2181 -v /etc/localtime:/etc/localtime wurstmeister/zookeeper
+# kafka
+docker run -d --rm --name kafka_2.21 -p 9092:9092 -e KAFKA_BROKER_ID=1 -e ALLOW_PLAINTEXT_LISTENER=yes -e KAFKA_CFG_ZOOKEEPER_CONNECT=10.50.8.23:2181 -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://10.50.8.23:9092 -e TZ="Asia/Shanghai" bitnami/kafka:2.2.1
+# kafdrop
+docker run -d --rm --name kafdrop -p 9009:9000 -e KAFKA_BROKERCONNECT=10.50.8.23:9092 -e JVM_OPTS="-Xms32M -Xmx64M" -e SERVER_SERVLET_CONTEXTPATH="/" obsidiandynamics/kafdrop
+```
+
 ## 多平台镜像构建
 
 利用docke的buildx插件实现多平台结构镜像的构建，使用前提：`内核版本 >= 4.8 & docker >= 19.03`。
