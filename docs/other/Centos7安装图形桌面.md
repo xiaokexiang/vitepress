@@ -26,7 +26,7 @@ $ yum --enablerepo=epel -y groups install "MATE Desktop"
 
 ### 安装tigervnc-1.13.1
 
-下载[此处]("https://sourceforge.net/projects/tigervnc/files/stable/1.13.1/el7/RPMS/")的所有文件到本地
+下载[此处](https://sourceforge.net/projects/tigervnc/files/stable/1.13.1/el7/RPMS/)的所有文件到本地
 
 ```bash
 $ yum localinstall ./tigervnc-*
