@@ -9,7 +9,7 @@ lastUpdated: "2020-07-04T20:38:54+08:00"
 
 `BlockingQueue`带`阻塞`功能的`线程安全`队列，但队列已满时会阻塞添加者，当队列为空时会阻塞获取者。它本身是一个接口，具体的功能由它的实现类来完成。
 
-![](https://image.leejay.top/image/20200707/w6jIy7hJTtxv.png?imageslim)
+![](https://images.leejay.top:9000/images/2025/01/21/83d4e005-9344-426b-8ffa-9949df939edb.png)
 
 #### 接口方法
 

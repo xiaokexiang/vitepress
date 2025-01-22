@@ -542,7 +542,7 @@ private final void tryPresize(int size) {
 >
 > 3. transferIndex用于表示整个数组扩容的进度，其扩容的范围不同分别表示为：`[0，transfer - 1] 表示还未分配线程扩容的部分，[transfer， n(原数组长度)]表示为已分配线程进行扩容，有可能正在扩容或扩容已完成`，如果当前线程CAS修改transferIndex成功，说明它可以在`指定步长范围内进行扩容操作`。
 >
->    ![](https://image.leejay.top/image/20200713/Jns0xdIrB1m6.png?imageslim)
+>    ![](https://images.leejay.top:9000/images/2025/01/21/0a1acccb-6fbc-49cb-a19d-6ceaa628525b.png)
 >
 > 4. 假设扩容还未完成之前，有的table[i]已经转移到新的table中了，有的还在旧的table中，此时有get()线程访问旧table[]，我们会新建一个`ForwardingNode`用于存放新的table的引用，保证get到的是新的table中的数据。那如果是put线程呢？会调用`helpTransfer`来帮助最早扩容的线程来进行扩容。
 >

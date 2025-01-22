@@ -213,7 +213,7 @@ function head() {
     ],
     [
       'link',
-      { rel: 'preconnect', href: 'https://image.leejay.top', crossorigin: '' }
+      { rel: 'preconnect', href: 'https://images.leejay.top:9000', crossorigin: '' }
     ],
   ]
 }

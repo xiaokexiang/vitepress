@@ -5,7 +5,7 @@ sort: 26
 ::: warning 为什么需要Ingress
 相比每个LoadBalancer服务都需要自己的负载均衡器以及独有的公网IP地址。Ingress只需要一个公网IP就能够为许多服务提供访问，Ingress会根据客户端的请求的主机名和路径转发到对应的服务。
 创建一个Ingress资源，可以通过一个IP地址公开多个服务。
-![](https://image.leejay.top/Fp9nlHS-n9i0lpzFe1fubWC_ktyc)
+![](https://images.leejay.top:9000/images/2025/01/21/0fae77ec-b91c-4860-af8a-44d57bdf0c20.png)
 :::
 
 ### 安装ingress控制器
@@ -15,7 +15,7 @@ sort: 26
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
 ```
 
-![ingress-controller](https://image.leejay.top/img/ingress-controller.png)
+![ingress-controller](https://images.leejay.top:9000/images/2025/01/21/9eb28781-530f-4862-89a5-66a95369a894.png)
 
 ### 创建ingress服务
 
@@ -71,11 +71,11 @@ spec:
 
 > 点击查看[annotations](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations)文档
 
-![ingress2](https://image.leejay.top/img/ingress2.png)
+![ingress2](https://images.leejay.top:9000/images/2025/01/21/74cc80c3-f0b1-4f30-b6c5-3d91f6fa1661.png)
 
 执行`kubectl -n helloworld describe ingress nginx-ingress`查看ingress具体信息
 
-![ingress3](https://image.leejay.top/img/ingress3.png)
+![ingress3](https://images.leejay.top:9000/images/2025/01/21/60446016-67d6-4731-a672-2e8113213374.png)
 
 最后我们需要在本地电脑配置hosts: #{IP} www.helloworld.com，然后访问`www.helloworld.com:#{ingress-nginx-controller-svc-port}/nginx/`来测试ingress是否生效。
 

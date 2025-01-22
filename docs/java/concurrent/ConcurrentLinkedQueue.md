@@ -143,7 +143,7 @@ class Test {
 
 ### offer执行流程
 
-![](https://image.leejay.top/image/20200710/XWBJx3hhhzX3.jpg?imageslim)
+![](https://images.leejay.top:9000/images/2025/01/21/19f3ecf2-5a3e-4709-b9c8-250360cb24f3.jpg)
 
 ---
 
@@ -203,11 +203,11 @@ final void updateHead(Node<E> h, Node<E> p) {
 >    1. `此时队列中head=tail(item=null, next=node1)，node1=(item!=null,next=null)`，此时线程A尝试offer数据，线程B尝试poll数据，线程A先进入循环，切换为线程B，此时`h = head = p`，继续执行`p.item = null`，判断`q = p.next != null`且`p != q`，所以执行else：`p = q`，继续循环，`p.item != null`，尝试CAS修改，且`p != h`，所以执行`updateHead将h改为哨兵节点`。
 >    2. 此时线程切换回A，线程执行`q = p.next（此时p已经是哨兵节点了）`判断`q != null`，继续判断`p = q`成立，执行`p = (t != (t = tail)) ? t : head;`，此时的`p = head`，继续从头节点开始循环插入尾节点。至此两个线程都执行完毕。
 >
->    ![](https://image.leejay.top/image/20200710/qsxlf6aucyH7.png?imageslim)
+>    ![](https://images.leejay.top:9000/images/2025/01/21/b2548c51-0d40-4f37-bb59-4d682ed684df.png)
 
 ### poll执行流程
 
-![](https://image.leejay.top/image/20200710/8Pn7oKJw2R07.jpg?imageslim)
+![](https://images.leejay.top:9000/images/2025/01/21/3a828b43-5b0a-47fa-b81c-a7b6ba5b55c8.jpg)
 
 ---
 

@@ -40,7 +40,7 @@ public class ReentrantReadWriteLock  implements ReadWriteLock {
 
 与独占锁、共享锁的state的使用不同，因为需要表示两种状态，所以对`int型state`做了`高低位切割`，分别表示不同的状态。已知`int=4byte= 32bit`，所以`高16位表示读，低16位表示写`。他们的取值范围在`[0 ~ 2^16 - 1]`，进而我们可以得出，最多有`2^16 -1`个线程可以获取读锁。
 
-![](https://image.leejay.top/image/20200630/iU956J9I2D6U.png?imageslim)
+![](https://images.leejay.top:9000/images/2025/01/21/6f9023cd-7c21-473e-a996-016128587bd1.png)
 
 ```java
 abstract static class Sync extends AbstractQueuedSynchronizer {

@@ -14,7 +14,7 @@ lastUpdated: 2022-03-07T10:21:01+08:00
 
 官方提供了不同平台的<a   href="https://github.com/mamoe/mirai/blob/dev/docs/UserManual.md">安装教程</a>，并推荐使用纯控制台的版本（mcl-install），我们在window上安装，所以选择`mcl-installer-?-windows-amd64.exe`版本下载，下载后双击打开安装。一路回车安装，都选择默认值即可。进入cmd执行mcl命令，出现下图提示即为安装成功。
 
-![](https://image.leejay.top/FovL62-908zQoLQiPl29Jz6vWWL6)
+![](https://images.leejay.top:9000/images/2025/01/22/e650bcf1-d1a0-4c8c-bfc5-449e0dace448.png)
 
 ### 插件安装
 
@@ -28,11 +28,11 @@ mcl --update-package net.mamoe:mirai-api-http --type plugin --channel stable
 
 上述命令执行后，再次启动mriai（mcl命令），程序会自动下载对应的插件包，但是会出现下图的错误：
 
-![](https://image.leejay.top/FjJimXKQD7GarY8aBQSOD9dwDyNP)
+![](https://images.leejay.top:9000/images/2025/01/22/5dafd8e0-edb2-4cdb-bd98-c79792b213ff.png)
 
 原因就是版本太高导致的（可以选择降低版本，降低为<a href="https://github.com/project-mirai/mirai-api-http/releases">1.1.0版本</a>，替换文件下的plugins内的jar包版本和config.yaml中的版本号）
 
-![](https://image.leejay.top/FhB3kqBzB_eaGAMXuONSl4AVFebb)
+![](https://images.leejay.top:9000/images/2025/01/22/a34693b4-245b-4a05-82ad-8361a8134027.png)
 
 #### 插件配置
 
@@ -85,7 +85,7 @@ adapterSettings:
 
 我们启动mriai后，在控制台输入`login qq账号 qq密码`，一般会出现滑动验证弹窗，如下图所示：
 
-![](https://image.leejay.top/Fg7qBcaAxh-E8aK4rEZgRCnKlAgu)
+![](https://images.leejay.top:9000/images/2025/01/22/b3393159-5de3-4901-a746-4dacf0ed17c0.png)
 
 这个问题我们需要使用<a href="https://github.com/mzdluo123/TxCaptchaHelper">滑动验证助手</a>来实现滑动验证，在安卓手机上安装软件<a href="https://maupdate.rainchan.win/txcaptcha.apk">滑动验证助手</a>，将上图中的5670输入软件后，会出现滑动弹窗，手动验证后，若出现登录成功的提示即为成功。
 
