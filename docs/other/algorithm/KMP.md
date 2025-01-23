@@ -13,11 +13,11 @@ lastUpdated: "2022-06-08T15:52:15+08:00"
 
 在字符串匹配中，若我们使用暴力破解对`主串`和`子串`进行匹配，当匹配失败就回退到主串的下一个字符重新开始匹配。在最坏的情况下，此种方式的时间复杂度为`O(m*n)`。匹配流程下图所示。
 
-![字符串匹配](https://images.leejay.top:9000/images/2025/01/22/7a5d1805-6c2c-4b67-a173-a2879fb945e4.gif)
+![字符串匹配](https://fnos.leejay.top:9000/images/2025/01/22/7a5d1805-6c2c-4b67-a173-a2879fb945e4.gif)
 
 ## KMP
 
-![kmp演示流程](https://images.leejay.top:9000/images/2025/01/22/538ab9c2-7b77-4aa8-a244-2069c3de983a.gif)
+![kmp演示流程](https://fnos.leejay.top:9000/images/2025/01/22/538ab9c2-7b77-4aa8-a244-2069c3de983a.gif)
 
 在理解KMP算法的核心概念`最大公共前后缀`之前，我们需要先明白`前缀`和`后缀`的含义。
 
@@ -37,7 +37,7 @@ graph LR
 
 基于最大公共前后缀生成的`next数组`就是用于记录`子串`中不同位置的最大公共前后缀长度。也就是当匹配失败的时候，子串需要`回退`的位置。那么next数组是如何计算的呢？参考下图手算next数组流程。
 
-![手算next数组](https://images.leejay.top:9000/images/2025/01/22/f91be56e-f9dc-4a1b-9ba7-da60367d0956.gif)
+![手算next数组](https://fnos.leejay.top:9000/images/2025/01/22/f91be56e-f9dc-4a1b-9ba7-da60367d0956.gif)
 
 > 1. next数组的第一位默认是-1，即当匹配失败的时候，`子串往后移动一位继续匹配`。
 > 2. next数组的作用：若子串的第n个位置的与主串不匹配，那么需要将子串回退到next[n]的位置再次进行匹配。
@@ -47,7 +47,7 @@ graph LR
 
 #### next数组
 
-![next数组推导](https://images.leejay.top:9000/images/2025/01/22/564c7ed0-cbe1-4ab6-bc8e-aff1210853bc.gif)
+![next数组推导](https://fnos.leejay.top:9000/images/2025/01/22/564c7ed0-cbe1-4ab6-bc8e-aff1210853bc.gif)
 
 ::: tip 推导过程
 1. 若计算next[i+1]的值时，必然已经知道next[i]的值（类似动态规划）。

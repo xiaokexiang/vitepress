@@ -24,7 +24,7 @@ lastUpdated: "2020-08-01T11:10:01+08:00"
 :::
 #### 图解
 
-![](https://images.leejay.top:9000/images/2025/01/22/cdfbffd0-bd79-42e9-96b0-9e35d57e570e.png)
+![](https://fnos.leejay.top:9000/images/2025/01/22/cdfbffd0-bd79-42e9-96b0-9e35d57e570e.png)
 
 > Java中的`PriorityBlockingQueue`底层就是使用`最小二叉堆`的逻辑结构实现的。
 
