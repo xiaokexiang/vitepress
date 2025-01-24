@@ -60,7 +60,7 @@
 
 ![image.png](https://fnos.leejay.top:9000/images/2025/01/23/a182533a-908a-416e-b865-496b5733d467.png)
 
-> [查看更多公共优选域名]("https://www.wetest.vip/page/cloudflare/cname.html")
+> [查看更多公共优选域名](https://www.wetest.vip/page/cloudflare/cname.html)
 
 #### 2.3 添加自定义主机名
 
