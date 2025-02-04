@@ -7,7 +7,7 @@ Lock与Synchronized都是`可重入锁`，否则会发生死锁。Lock锁核心�
 
 ### AbstractQueueSynchronizer
 
-![](https://fnos.leejay.top:9000/images/2025/01/21/98fe87f0-53ba-4246-863b-f4ae61346af0.png)
+![](https://nas.leejay.top/images/2025/01/21/98fe87f0-53ba-4246-863b-f4ae61346af0.png)
 
 #### 记录当前锁的持有线程
 
@@ -39,7 +39,7 @@ Lock与Synchronized都是`可重入锁`，否则会发生死锁。Lock锁核心�
 
 AQS内部维护了一个基于`CLH(Craig, Landin, and Hagersten(CLH)locks。基于链表的公平的自旋锁)`变种的FIFO双向链表阻塞队列，在等待机制上由自旋改成阻塞唤醒(park/unpark)。
 
-![](https://fnos.leejay.top:9000/images/2025/01/21/4a990b97-d0b7-4b15-8e3e-1015ae43e1e8.png)
+![](https://nas.leejay.top/images/2025/01/21/4a990b97-d0b7-4b15-8e3e-1015ae43e1e8.png)
 
 > 还未初始化的时候，head = tail = null，之后初始化队列，往其中假如阻塞的线程时，会新建一个空的node，让head和tail都指向这个空node。之后加入被阻塞的线程对象。当head=tai时候说明队列为空。
 
@@ -463,7 +463,7 @@ static void selfInterrupt() {
 
 ### 独占锁获取执行流程
 
-![](https://fnos.leejay.top:9000/images/2025/01/21/1e827f56-c048-4b29-9c20-9dbd32040087.png)
+![](https://nas.leejay.top/images/2025/01/21/1e827f56-c048-4b29-9c20-9dbd32040087.png)
 
 ### unlock
 

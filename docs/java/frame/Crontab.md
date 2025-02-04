@@ -63,5 +63,5 @@ crontab -e
 tail -f /opt/software/cron.txt
 ```
 
-> ![](https://fnos.leejay.top:9000/images/2025/01/21/ab5a3c2c-320f-4143-b4bd-00f19e672c1c.png)
+> ![](https://nas.leejay.top/images/2025/01/21/ab5a3c2c-320f-4143-b4bd-00f19e672c1c.png)
 
