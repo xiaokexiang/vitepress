@@ -86,7 +86,7 @@ public StampedLock() {
 >
 > 我们可以看出`第8位表示写锁的状态`，只有0/1两种情况，这样`写锁就不支持重入`了。`低7位表示读锁被获取的次数`。剩下的其他位是用来表示版本号的，他们共同构成了state。
 >
-> ![](https://fno.leejay.top:9000/images/2025/01/21/86922290-593f-48c8-ad93-8a79b3db928c.png)
+> ![](https://fn.leejay.top:9000/images/2025/01/21/86922290-593f-48c8-ad93-8a79b3db928c.png)
 
 | 变量（long）               | 二进制(64bit，省略为0)  | 十进制 |
 | :------------------------- | :---------------------- | :----- |
@@ -125,7 +125,7 @@ static final class WNode {
 > 2. WNode中的status只有三种状态：`0、WAITING、CANCELED`。
 > 3. WNode中的mode属性用于表示当前的节点是：`RMODE(读) or WMODE(写)`。
 
-![](https://fno.leejay.top:9000/images/2025/01/21/12e29985-6d74-4fe0-a476-fae59093cdaa.png)
+![](https://fn.leejay.top:9000/images/2025/01/21/12e29985-6d74-4fe0-a476-fae59093cdaa.png)
 
 ### writeLock
 

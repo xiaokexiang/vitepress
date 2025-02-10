@@ -213,7 +213,7 @@ function head() {
     ],
     [
       'link',
-      { rel: 'preconnect', href: 'https://fno.leejay.top:9000', crossorigin: '' }
+      { rel: 'preconnect', href: 'https://fn.leejay.top:9000', crossorigin: '' }
     ],
   ]
 }

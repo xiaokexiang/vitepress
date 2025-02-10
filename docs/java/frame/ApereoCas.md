@@ -128,7 +128,7 @@ public class CasClientConfigurations {
 ### 登陆
 `其实官网的一张图就解释的非常清楚了，很形象。在此贴出该图: `
 
-<img src="https://fno.leejay.top:9000/images/2025/01/21/b5a60ee9-8ac2-4ee0-96e5-a6ed7c6dea7c.png"/>
+<img src="https://fn.leejay.top:9000/images/2025/01/21/b5a60ee9-8ac2-4ee0-96e5-a6ed7c6dea7c.png"/>
 
 ### 超时分析
 `目前存在三种控制超时时间的参数，分别是Client Session timeout，TGT timeout和ST timeout。`
@@ -160,7 +160,7 @@ cas.ticket.st.timeToKillInSeconds=30
 
 #### 不同情况超时登出流程图
 
-![](https://fno.leejay.top:9000/images/2025/01/21/c8be0561-90ae-48bd-9d7a-803da14bdeac.png)
+![](https://fn.leejay.top:9000/images/2025/01/21/c8be0561-90ae-48bd-9d7a-803da14bdeac.png)
 
 >   推荐Cas Client的session timeout <= TGT timeout
 
