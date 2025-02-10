@@ -75,10 +75,10 @@ while true; do curl 10.110.71.58; sleep 2; done
 ```
 > 执行滚动升级后，新的容器启动后会依次关闭旧的容器。
 > ::: details 升级
-> ![](https://nas.leejay.top/images/2025/01/21/7a9af050-e033-4b45-866a-719d084955b3.png)
+> ![](https://fno.leejay.top:9000/images/2025/01/21/7a9af050-e033-4b45-866a-719d084955b3.png)
 > :::
 > ::: details 请求变化
-> 另一边我们可以看到请求的响应由V1变为了V2。![](https://nas.leejay.top/images/2025/01/21/c1a03dcb-fbf6-44ea-b2e6-f10d3c590ff6.png)
+> 另一边我们可以看到请求的响应由V1变为了V2。![](https://fno.leejay.top:9000/images/2025/01/21/c1a03dcb-fbf6-44ea-b2e6-f10d3c590ff6.png)
 > :::
 
 ### 回滚
@@ -99,7 +99,7 @@ kubectl rollout resume deployment kubia-deployment-v1
 ```
 > ::: details 回滚
 > 如果在升级过程中运行回滚，那么会直接停止滚动升级。已创建的Pod会被老Pod替代。
-> ![](https://nas.leejay.top/images/2025/01/21/9f499cd6-3cd8-4cbc-a041-390388970171.png)
+> ![](https://fno.leejay.top:9000/images/2025/01/21/9f499cd6-3cd8-4cbc-a041-390388970171.png)
 > :::
 > 
 
@@ -133,7 +133,7 @@ spec:
         image: luksa/kubia:v1
 ```
 ::: danger 更新策略
-![](https://nas.leejay.top/images/2025/01/21/7fc2b8a7-b819-433c-8d9f-5b6e71d91e77.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/7fc2b8a7-b819-433c-8d9f-5b6e71d91e77.png)
 - Recreate: 创建新的pod，等待成功运行后，再删除旧的pod（`需要更多的硬件资源`）。
 - RollingUpdate: 创建新的pod，等待成功运行后，按照创建顺序删除旧的pod（又称为`滚动升级`）。
 :::
@@ -175,11 +175,11 @@ spec:
             port: 8080
 ```
 
-> 当Deployment进行Pod升级的时候，就绪探针每隔1s会发起一次请求，请求失败后被标记为`未就绪`。![](https://nas.leejay.top/images/2025/01/21/b96ca7b6-67ee-4de2-adf8-43dd27879f42.png)
+> 当Deployment进行Pod升级的时候，就绪探针每隔1s会发起一次请求，请求失败后被标记为`未就绪`。![](https://fno.leejay.top:9000/images/2025/01/21/b96ca7b6-67ee-4de2-adf8-43dd27879f42.png)
 >
 > Pod成功的有3个，没有ready的就是就绪探针探测不可用的Pod（升级失败）。
 >
-> 默认`10分钟`内不能完成滚动升级，就会视为失败。![](https://nas.leejay.top/images/2025/01/21/07a86c99-9264-4649-be6c-3955c68f749d.png)
+> 默认`10分钟`内不能完成滚动升级，就会视为失败。![](https://fno.leejay.top:9000/images/2025/01/21/07a86c99-9264-4649-be6c-3955c68f749d.png)
 
 ### 参数解析
 | 参数                              | 含义                                                         | 默认值        |

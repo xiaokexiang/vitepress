@@ -35,7 +35,7 @@ public class ThreadLocal<T> {
 
 ```
 
-![](https://nas.leejay.top/images/2025/01/21/601d9b2e-c13d-488f-bda7-13b2d1187b29.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/601d9b2e-c13d-488f-bda7-13b2d1187b29.png)
 
 > 1. 当前线程执行时(`currentThread已初始化`)，会初始化ThreadLocal对象，存储在`Heap堆`中，ThreadLocal的引用，即`ThreadLocalRef`会存储在当前线程`Stack栈`中。
 > 2. 当执行ThreadLocal的get()/set()方法时，会通过`当前线程的引用找到当前线程在堆中的实例`，判断这个实例的成员变量：`ThreadLocalMap`是否已经创建(即初始化)，如果没有则初始化。

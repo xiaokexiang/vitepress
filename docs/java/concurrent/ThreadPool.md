@@ -15,7 +15,7 @@ lastUpdated: "2020-07-17T17:01:26+08:00"
 
 #### 线程池类继承体系
 
-![](https://nas.leejay.top/images/2025/01/21/f2d57498-9e80-47c3-bfdd-3b6bda7d788b.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/f2d57498-9e80-47c3-bfdd-3b6bda7d788b.png)
 
 > `ThreadPoolExecutor`和`ScheduledExecutorService`是需要关注的两个核心类，前者是`线程池的具体实现`，后者除了能实现线程池的基本功能，还可以提供`周期性执行任务`功能。
 >
@@ -183,7 +183,7 @@ private void decrementWorkerCount() {
 >
 > `TERMINATED`：`terminated()`执行完毕，至此线程池才真正关闭。
 >
-> ![线程迁移状态](https://nas.leejay.top/images/2025/01/21/3c69d061-3c51-467f-a522-dac2bad1d6d8.png)
+> ![线程迁移状态](https://fno.leejay.top:9000/images/2025/01/21/3c69d061-3c51-467f-a522-dac2bad1d6d8.png)
 ---
 
 ### 线程池的关闭
@@ -521,7 +521,7 @@ public class ThreadPoolSingleton implements Serializable {
 
 - 线程池关闭的流程状态图
 
-  ![](https://nas.leejay.top/images/2025/01/21/6d2e0d83-547a-453d-82d9-a5005ec02cf8.png)
+  ![](https://fno.leejay.top:9000/images/2025/01/21/6d2e0d83-547a-453d-82d9-a5005ec02cf8.png)
 
 ---
 
@@ -957,7 +957,7 @@ private void processWorkerExit(Worker w, boolean completedAbruptly) {
 
 ### 线程池执行示意图
 
-![](https://nas.leejay.top/images/2025/01/21/0b3ec486-a379-45ee-b1de-dec23121df4b.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/0b3ec486-a379-45ee-b1de-dec23121df4b.png)
 
 ---
 

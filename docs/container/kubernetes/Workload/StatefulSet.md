@@ -7,7 +7,7 @@ sort: 37
 - StatefulSet 是用来管理`有状态应用`的工作负载 API 对象。管理某些pod集合的部署和扩缩，并为这些pod提供持久存储和持久标识符。
 - 每个Pod维护了一个有粘性的ID。这些Pod是基于相同的规约来创建的，但是不能相互替换：`无论怎么调度，每个Pod都有一个永久不变的ID`。
 - 修改StatefulSet的配置后并不会重新启动Pod（删除Pod可以触发）。
-> ![](https://nas.leejay.top/images/2025/01/21/02b1312b-4f93-4d67-8087-4ef95ba48688.png)
+> ![](https://fno.leejay.top:9000/images/2025/01/21/02b1312b-4f93-4d67-8087-4ef95ba48688.png)
 :::
 
 ### 基于PV创建StatefulSet
@@ -88,7 +88,7 @@ spec:
 
 > `statefulSet`会等到第一个Pod启动完毕后才会启动第二个Pod。如果某个Pod被删除，那么statefulSet会创建一个新的Pod（标识符、存储相同的新Pod，`新旧Pod不一定会在一个node上`）。
 >
-> ![](https://nas.leejay.top/images/2025/01/21/aedf60bf-8e1b-4a16-bc61-e24de0459fd8.png)
+> ![](https://fno.leejay.top:9000/images/2025/01/21/aedf60bf-8e1b-4a16-bc61-e24de0459fd8.png)
 >
 > 我们可以通过`curl -X POST -d "Hey there! This greeting was submitted to kubia-0. " localhost:8001/api/v1/namespaces/default/pods/kubia-stateful-0/proxy/`前后访问两次来判断新旧Pod是否使用相同的存储空间和标识符。
 >

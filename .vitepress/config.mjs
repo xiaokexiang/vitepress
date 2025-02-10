@@ -213,7 +213,7 @@ function head() {
     ],
     [
       'link',
-      { rel: 'preconnect', href: 'https://nas.leejay.top', crossorigin: '' }
+      { rel: 'preconnect', href: 'https://fno.leejay.top:9000', crossorigin: '' }
     ],
   ]
 }

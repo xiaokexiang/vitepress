@@ -95,7 +95,7 @@ spec:
 
 hostPath卷指向节点文件系统上的特定文件或者目录。在同一个节点上运行并在其hostPath卷中使用相同路径的Pod可以看到相同的文件。
 
-![](https://nas.leejay.top/images/2025/01/21/f7d375c0-62f1-44ee-aef1-1e7f80777807.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/f7d375c0-62f1-44ee-aef1-1e7f80777807.png)
 
 > `hostPath`卷是`持久性`存储，之前的`emptyDir`和`gitRepo`都会随着Pod被删除时删除。
 >
@@ -236,7 +236,7 @@ spec:
 
 #### 持久卷与持久卷声明
 
-![](https://nas.leejay.top/images/2025/01/21/9969a10e-3de7-4a00-96af-6084f1bbff8f.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/9969a10e-3de7-4a00-96af-6084f1bbff8f.png)
 
 > 当集群用户需要在其Pod使用持久化存储时，他们首先创建持久化声明（PersistentVolumeClaim）清单，指定所需要的`最低容量要求和访问模式`。
 >

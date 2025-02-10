@@ -7,7 +7,7 @@ sort: 15
 - `每个Pod就相当于一个独立的逻辑机器`，拥有自己的IP、主机名、进程等，运行一个应用程序，可以是单个进程的运行在单个容器中，也可以是`每个进程都运行在自己的容器中`。
 :::
 
-![](https://nas.leejay.top/images/2025/01/21/9f9902e3-8a56-46c4-9775-6f12d2a06285.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/9f9902e3-8a56-46c4-9775-6f12d2a06285.png)
 
 > 1. 同一个Pod内的多个容器共享相同的Linux命名空间，拥有相同的IP、主机名、网络接口等。
 > 2. 同一个Pod内的容器不能出现相同的端口号，可以通过`localhost`地址进行互相访问。
@@ -25,7 +25,7 @@ kubectl get pods -o wide
 ```
 :::details Pod内容器数量该如何选择？
 
-![](https://nas.leejay.top/images/2025/01/21/86d0096a-2aaa-449f-a577-c1abd2147029.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/86d0096a-2aaa-449f-a577-c1abd2147029.png)
 
 > 1. 一个容器中不应该包含多个进程，Pod也不需要包含多个容器，多个Pod也不需要部署在同一台工作节点上。
 > 2. Pod内是否包含多个容器取决于这些容器代表的是一个整体还是相互独立的组件。
@@ -254,7 +254,7 @@ spec:
 >
 > 通过`kubectl desribe pod kubia-liveness`查看容器运行的情况。
 >
-> ![](https://nas.leejay.top/images/2025/01/21/1d7a7456-dff3-4a52-853a-c13d1ad8b80d.png)
+> ![](https://fno.leejay.top:9000/images/2025/01/21/1d7a7456-dff3-4a52-853a-c13d1ad8b80d.png)
 
 #### Readnesses
 
@@ -264,7 +264,7 @@ spec:
 >
 > A：就绪探针下，如果容器未通过准备检查，那么`不会被终止或重新启动`。存活探针会杀死异常的容器并启动新的正常容器来保证Pod正常工作。就绪探针确保只有准备好处理请求的Pod才可以接受请求。如果就绪探测失败，就会`从服务中移除该Pod`。
 
-![](https://nas.leejay.top/images/2025/01/21/e1398cb7-fb91-4820-ad6a-93c5b35ada1b.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/e1398cb7-fb91-4820-ad6a-93c5b35ada1b.png)
 
 ```yaml
 apiVersion: v1

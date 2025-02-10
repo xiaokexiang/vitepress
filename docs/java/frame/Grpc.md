@@ -148,7 +148,7 @@ message HelloResponse {
 
 执行maven命令：`mvn clean compile`。
 
-![](https://nas.leejay.top/images/2025/01/21/6500b98f-c93d-49b6-ba6e-b5782c89ce7d.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/6500b98f-c93d-49b6-ba6e-b5782c89ce7d.png)
 
 > 编译后的文件在target目录下，如上图所示。
 
@@ -211,5 +211,5 @@ public class GrpcClient {
 
 #### 基于postman的客户端
 
-![](https://nas.leejay.top/images/2025/01/21/0476fe77-c51c-44e5-9acb-de680314b5c0.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/0476fe77-c51c-44e5-9acb-de680314b5c0.png)
 

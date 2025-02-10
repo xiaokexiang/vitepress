@@ -5,7 +5,7 @@ sort: 60
 ::: warning 概念
 将Pod的元数据（`事先无法知道的数据，ex Pod名`，Yaml中已定义的数据）通过`环境变量或文件`的方式给Pod内的容器调用。
 
-![](https://nas.leejay.top/images/2025/01/21/65522506-8f68-472d-b39e-1849d04128ec.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/65522506-8f68-472d-b39e-1849d04128ec.png)
 
 > Pod manifest是预先定义的数据，还有容器运行后才知道的数据，都交予downwardAPI进行暴露。
 
@@ -70,7 +70,7 @@ spec:
 > kubectl exec downward -- env
 > ```
 >
-> ![](https://nas.leejay.top/images/2025/01/21/c2336b1e-a8ef-419a-a81f-5b83e27498bc.png)
+> ![](https://fno.leejay.top:9000/images/2025/01/21/c2336b1e-a8ef-419a-a81f-5b83e27498bc.png)
 
 ### 基于卷暴露
 
@@ -134,4 +134,4 @@ spec:
 > kubectl exec downward2 -- ls -lL /etc/downward
 > ```
 >
-> ![](https://nas.leejay.top/images/2025/01/21/4b6dfcd6-a459-48ff-8509-d99640cb6436.png)
+> ![](https://fno.leejay.top:9000/images/2025/01/21/4b6dfcd6-a459-48ff-8509-d99640cb6436.png)

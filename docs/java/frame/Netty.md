@@ -13,7 +13,7 @@ lastUpdated: "2020-12-14T17:58:49+08:00"
 
 #### 组件概览
 
-![](https://nas.leejay.top/images/2025/01/21/73b2ee7b-1289-4c17-821d-6a0ef754d291.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/73b2ee7b-1289-4c17-821d-6a0ef754d291.png)
 
 #### Channel
 
@@ -23,7 +23,7 @@ lastUpdated: "2020-12-14T17:58:49+08:00"
 
 Netty的核心抽象，用于处理连接的生命周期中所发生的事件。
 
-![](https://nas.leejay.top/images/2025/01/21/2d455e94-cc7c-4232-b6eb-62b69418552f.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/2d455e94-cc7c-4232-b6eb-62b69418552f.png)
 
 > 1. 一个EventLoopGroup包含一个或多个EventLoop。
 > 2. 一个EventLoop在其生命周期中只和一个Thread绑定。该EventLoop处理的I/O都在该Thread上被处理。
@@ -136,7 +136,7 @@ public class EchoClientHandlerLast extends SimpleChannelInboundHandler<ByteBuf> 
 >
 > 即为：EchoClientHandlerFirst -> EchoClientHandler -> EchoClientHandlerLast。
 
-![](https://nas.leejay.top/images/2025/01/21/237e2278-6bbb-4524-a953-5f436b674268.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/237e2278-6bbb-4524-a953-5f436b674268.png)
 
 > 入站和出站是相对的，以上图为例：Server端入站即是Client端的出站，Server端的出站即是Client端的入站。
 >
@@ -184,7 +184,7 @@ ServerBootstrap bootstrap = new ServerBootstrap();// server
 
 #### Channel's API
 
-![](https://nas.leejay.top/images/2025/01/21/127976c4-c358-4588-bc04-b5b9d2cff519.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/127976c4-c358-4588-bc04-b5b9d2cff519.png)
 
 > Channel是`线程安全`的，在多线程下发送消息，其顺序由发送的顺序决定。
 
@@ -194,7 +194,7 @@ ServerBootstrap bootstrap = new ServerBootstrap();// server
 
 提供基于JDK的NIO进行封装的API，所有I/O操作都是异步的，其核心就是`Selector`选择器（和某个线程绑定），会在：`新的Channel已被接受且就绪`、`Channel连接已经完成`、`Channel有已就绪的可供读取的数据`、`Channel可用于写数据`时发出通知。
 
-![](https://nas.leejay.top/images/2025/01/21/406600d9-f2f5-4ccd-bd09-644e73c05833.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/406600d9-f2f5-4ccd-bd09-644e73c05833.png)
 
 - Epoll
 
@@ -204,7 +204,7 @@ ServerBootstrap bootstrap = new ServerBootstrap();// server
 
 原生JDK中的BIO是阻塞实现，Netty利用了`SO_TIMEOUT`标识，当阻塞一定时长时，抛出`SocketTimeOut`异常并捕获该异常，并继续循环，在EventLoop下次运行时将再次尝试。
 
-![](https://nas.leejay.top/images/2025/01/21/54cbd769-6cb6-49ca-9e48-2e91be5e4bbe.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/54cbd769-6cb6-49ca-9e48-2e91be5e4bbe.png)
 
 - Local
 
@@ -283,7 +283,7 @@ public void composite() {
 
 #### ByteBuf字节操作
 
-![](https://nas.leejay.top/images/2025/01/21/885d0e07-cd25-4606-8f0a-8772a6e458ce.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/885d0e07-cd25-4606-8f0a-8772a6e458ce.png)
 
 > 1. 初始状态下：`readIndex = writeIndex = 0`，若`readIndex | writeIndex > capacity-1`或`readIndex > WriteIndex`，则会抛出`indexOutOfBoundException`。
 > 2. 可丢弃字节，可以理解为已读字节，`[0, readIndex]`部分的字节已被全部读取，`(readIndex, writeIndex]`部分的字节可以被读取，`(writeIndex，capacity)`部分的字节尚未被写入。
@@ -389,7 +389,7 @@ public interface ReferenceCounted {
 
 #### ByteBuf总结
 
-![](https://nas.leejay.top/images/2025/01/21/2b4aa6db-f724-4208-ac6b-79e7cd03755b.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/2b4aa6db-f724-4208-ac6b-79e7cd03755b.png)
 
 ---
 
@@ -397,7 +397,7 @@ public interface ReferenceCounted {
 
 #### ChannelHandler生命周期
 
-![](https://nas.leejay.top/images/2025/01/21/2fdaac8f-ddc1-48c3-b0f7-f7562496f2ec.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/2fdaac8f-ddc1-48c3-b0f7-f7562496f2ec.png)
 
 ##### ChannelHandlerAdapter
 
@@ -671,7 +671,7 @@ public interface ChannelPipeline
 
 ChannelHandlerContext代表了ChannelHandler和ChannelPipeline之间的关联，每有一盒ChannelHandler添加创建到Pipeline，都会创建ChannelHandlerContext与之关联，且`它们之间的关联永不会变`。
 
-![](https://nas.leejay.top/images/2025/01/21/66c7b6e3-5782-41c1-9cc2-5b8bfbdb7225.png)
+![](https://fno.leejay.top:9000/images/2025/01/21/66c7b6e3-5782-41c1-9cc2-5b8bfbdb7225.png)
 
 > 1. Channel与ChannelPipeline绑定，ChannelPipeline包含多个ChannelHandler，一个ChannelHandler可以属于多个不同的ChannelPipeline，`每个ChannelHandler都有唯一一个ChannelHandlerContext与之对应`。
 >
