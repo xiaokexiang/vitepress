@@ -136,3 +136,9 @@
 .DocSearch {
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
+
+.VPSidebarItem.level-1.is-link.is-active {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
