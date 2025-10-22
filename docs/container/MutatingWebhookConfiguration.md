@@ -1,6 +1,6 @@
 # MutatingWebhookConfiguration
 
-> [**MutatingWebhookConfiguration**]("https://kubernetes.io/zh-cn/docs/reference/kubernetes-api/extend-resources/mutating-webhook-configuration-v1/") 是 Kubernetes 的一种动态 Admission Webhook，用于在资源对象被创建或更新时**修改请求对象**。  
+> <a src="https://kubernetes.io/zh-cn/docs/reference/kubernetes-api/extend-resources/mutating-webhook-configuration-v1/">MutatingWebhookConfiguration</a> 是 Kubernetes 的一种动态 Admission Webhook，用于在资源对象被创建或更新时**修改请求对象**。  
 > 它在对象写入 etcd 前拦截 API 请求，可以自动注入字段、添加默认值或修改特定配置，从而实现自动化管理和安全策略。
 
 ## Certs
