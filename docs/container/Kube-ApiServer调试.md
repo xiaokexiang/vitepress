@@ -121,7 +121,7 @@ API server listening at: [::]:2345
 > 2. dlv --listen=:2345 --headless=true --api-version=2 exec `${apiserver path}` -- `${flags参数}`
 
 - 使用goLand连接
-![goLand](https://fn.leejay.top:9000/images/2025/05/22/5f35c3b9-eca8-4c65-a98c-87b03fa7f84f.jpeg)
+![goLand](https://image.leejay.top/2025/05/22/5f35c3b9-eca8-4c65-a98c-87b03fa7f84f.jpeg)
 
 > 查看dlv --listen=:2345启动的终端显示，显示apiserver的启动日志，且无报错即为正常。
 
@@ -156,7 +156,7 @@ dlv --listen=:2345 --headless=true --api-version=2 exec /root/kube-apiserver -- 
 
 - goLand连接
 
-![goLand](https://fn.leejay.top:9000/images/2025/05/22/5f35c3b9-eca8-4c65-a98c-87b03fa7f84f.jpeg)
+![goLand](https://image.leejay.top/2025/05/22/5f35c3b9-eca8-4c65-a98c-87b03fa7f84f.jpeg)
 
 #### 参考来源
 

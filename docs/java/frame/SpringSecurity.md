@@ -125,7 +125,7 @@ public class UserManager implements UserDetailsManager {
 
 ### 获取用户信息
 
-Spring Security（简称SS）的用户信息由使用者通过实现框架提供的`UserDetailsService$loadUserByUsername()`接口方法提供。SS还提供了`UserDetails接口`，作为提供用户信息的核心接口。内嵌了`User类`作为`UserDetails`的默认实现。`UserDetailsManager`作为管理用户信息（增删改查）的默认内嵌管理器接口。而`InMemoryUserDetailsManager`则是默认的用户管理器实现。![](https://fn.leejay.top:9000/images/2025/01/21/472c9c6d-3219-430c-90fc-bfc25e4b78b1.png)
+Spring Security（简称SS）的用户信息由使用者通过实现框架提供的`UserDetailsService$loadUserByUsername()`接口方法提供。SS还提供了`UserDetails接口`，作为提供用户信息的核心接口。内嵌了`User类`作为`UserDetails`的默认实现。`UserDetailsManager`作为管理用户信息（增删改查）的默认内嵌管理器接口。而`InMemoryUserDetailsManager`则是默认的用户管理器实现。![](https://image.leejay.top/2025/01/21/472c9c6d-3219-430c-90fc-bfc25e4b78b1.png)
 
 > User类内嵌了`UserBuilder`，用于建造设计模式的使用。
 >
@@ -1062,7 +1062,7 @@ public class ProviderManager implements AuthenticationManager, MessageSourceAwar
 
 ```
 
-![](https://fn.leejay.top:9000/images/2025/01/21/353871e1-5a67-414c-92bd-c5f5c7b9588a.png)
+![](https://image.leejay.top/2025/01/21/353871e1-5a67-414c-92bd-c5f5c7b9588a.png)
 
 > 1. `ProviderManager`是`AuthenticationManager`的实现类，持有`AuthenticationProvider`集合的引用。
 >
@@ -1240,7 +1240,7 @@ public final class HttpSecurity extends
 
 在Spring Security Filter中是通过`FilterChainProxy`来管理多个代理不同路径的`SecurityFilterChain`过滤器链，同时`FilterChainProxy`是通过`DelegatingFilterProxy`加入到过滤器链中的一部分。如下图所示：
 
-![](https://fn.leejay.top:9000/images/2025/01/21/5477a188-ecff-4952-8f6e-e8c64eebeee1.png)
+![](https://image.leejay.top/2025/01/21/5477a188-ecff-4952-8f6e-e8c64eebeee1.png)
 
 ```java
 public interface SecurityFilterChain {

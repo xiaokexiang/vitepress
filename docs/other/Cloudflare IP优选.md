@@ -16,13 +16,13 @@
 
 打开[CF](https://dash.cloudflare.com/)，选择添加域，在两个域名的购买商处将DNS名称服务器修改为CF提供的地址，等待一会，就能够在CF中来管理这两个域名了。
 
-![From leejay.top](https://fn.leejay.top:9000/images/2025/01/23/30ffd762-dc2f-453a-81d7-0a38be9573ef.png)
+![From leejay.top](https://image.leejay.top/2025/01/23/30ffd762-dc2f-453a-81d7-0a38be9573ef.png)
 
 - VISA银行卡，用于开启CF的[Cloudflare for SaaS](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/)（并不收费只做验证）
 
 ## 流程图
 
-![image.png](https://fn.leejay.top:9000/images/2025/01/23/186efa9a-6d2c-479d-afeb-39fcdf8349d7.png)
+![image.png](https://image.leejay.top/2025/01/23/186efa9a-6d2c-479d-afeb-39fcdf8349d7.png)
 
 > IPV4网络通过`fnos.leejay.top`域名能够访问IPV6网络中的web服务。
 
@@ -34,13 +34,13 @@
 
 
 
-![image.png](https://fn.leejay.top:9000/images/2025/01/23/ab395c13-2133-4b78-a9b5-88024971b0e7.png)
+![image.png](https://image.leejay.top/2025/01/23/ab395c13-2133-4b78-a9b5-88024971b0e7.png)
 
 > 动态域名 -> 添加任务 -> 服务商选择CloudFlare -> 类型选择IPV6 -> 域名填写v6.0001024.cn
 
 点击确认后查看是否成功设置，登陆CF查看域名0001024.cn的DNS解析中是否包含刚才设置的域名解析。
 
-![image.png](https://fn.leejay.top:9000/images/2025/01/23/0ab84cf0-ecb4-4992-b90b-8ba1f97fd8af.png)
+![image.png](https://image.leejay.top/2025/01/23/0ab84cf0-ecb4-4992-b90b-8ba1f97fd8af.png)
 
 > 需要开启代理，即小黄云是打开状态。若没打开，编辑打开即可。
 
@@ -52,13 +52,13 @@
 
 在域名`0001024.cn`下，点击`SSL/TLS ->自定义主机名`，添加回退源`v6.0001024.cn`即步骤1中的域名。等待回退源状态为`有效`。
 
-![image.png](https://fn.leejay.top:9000/images/2025/01/23/0ad36244-f35e-4555-979b-e55b20f38c5c.png)
+![image.png](https://image.leejay.top/2025/01/23/0ad36244-f35e-4555-979b-e55b20f38c5c.png)
 
 #### 2.2 优选配置
 
 在`0001024.cn`域名中配置`cdn.00024.cn -> cloudflare.182682.xyz` CNAME解析，且不要开启代理。
 
-![image.png](https://fn.leejay.top:9000/images/2025/01/23/a182533a-908a-416e-b865-496b5733d467.png)
+![image.png](https://image.leejay.top/2025/01/23/a182533a-908a-416e-b865-496b5733d467.png)
 
 > [查看更多公共优选域名](https://www.wetest.vip/page/cloudflare/cname.html)
 
@@ -66,20 +66,20 @@
 
 参考流程图，此处的自定义主机名为`fnos.leejay.top`用于实现最终访问局域网web服务。
 
-![image.png](https://fn.leejay.top:9000/images/2025/01/23/242cef73-efae-43ef-8802-d34f849f9efc.png)
+![image.png](https://image.leejay.top/2025/01/23/242cef73-efae-43ef-8802-d34f849f9efc.png)
 
 查看自定义主机名列表，此时会提示需要配置`TXT`验证。回到`leejay.top`DNS解析界面，添加2个TXT解析（此处无图，按照提示配置即可，注意为TXT类型）。同时需要配置一个CNAME解析（`按照网上的教程没有这一步，导致主机名状态一直显示失效！`）
 
-![image.png](https://fn.leejay.top:9000/images/2025/01/23/72ddefca-01b5-4784-b133-456d67f79cef.png)
+![image.png](https://image.leejay.top/2025/01/23/72ddefca-01b5-4784-b133-456d67f79cef.png)
 
 > `fnos.leejay.top -> cdn.0001024.cn，注意不需要开启代理`。
 
 等待几分钟，自定义主机状态全绿表示配置完成（如果遇到了一直不会变绿，那么删除自定义主机名重新配置一次，注意TXT解析不能配置错！）
 
-![image.png](https://fn.leejay.top:9000/images/2025/01/23/ab1f87c2-1780-401e-a08f-e8e59dd0a38c.png)
+![image.png](https://image.leejay.top/2025/01/23/ab1f87c2-1780-401e-a08f-e8e59dd0a38c.png)
 
 ### 3. 验证
 
 再次访问[网站测速](https://www.itdog.cn/http/)，访问`fnos.leejay.top`查看测速结果。
 
-![image.png](https://fn.leejay.top:9000/images/2025/01/23/9e9598e0-a6fe-489f-aa99-4dfd7671205d.png)
+![image.png](https://image.leejay.top/2025/01/23/9e9598e0-a6fe-489f-aa99-4dfd7671205d.png)

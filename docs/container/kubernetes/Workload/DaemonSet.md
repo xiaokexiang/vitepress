@@ -31,7 +31,7 @@ spec:
 			  image: luksa/ssd-monitor
 ```
 ::: details
-![](https://fn.leejay.top:9000/images/2025/01/21/fe463d9a-a241-4a4e-8429-c4fc2baa960e.png)
+![](https://image.leejay.top/2025/01/21/fe463d9a-a241-4a4e-8429-c4fc2baa960e.png)
 
 daemonSet会默认添加如下容忍度：
 
@@ -57,5 +57,5 @@ kubectl apply -f ssd-monitor-daemonset.yaml
 # 我们修改node的标签为disk=hdd，ds管理的pod会被删除
 kubectl label nodes k8s-node1 disk=hdd --overwrite
 ```
-> ![](https://fn.leejay.top:9000/images/2025/01/21/1befb798-bd53-431c-b3ab-da5c47ccc506.png)
-> ![](https://fn.leejay.top:9000/images/2025/01/21/c6ae99cb-a36d-4df6-9a4f-b142460535a6.png)
+> ![](https://image.leejay.top/2025/01/21/1befb798-bd53-431c-b3ab-da5c47ccc506.png)
+> ![](https://image.leejay.top/2025/01/21/c6ae99cb-a36d-4df6-9a4f-b142460535a6.png)

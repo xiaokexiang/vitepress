@@ -10,7 +10,7 @@ sort: 10
 
 容器内的进程是运行在宿主机的操作系统上的，而虚拟机内的进程是运行在不同的操作系统上的，但容器内的进程是与其他进程隔离的。、
 
-![](https://fn.leejay.top:9000/images/2025/01/21/fa828129-2835-4a18-a08c-7bad38fce272.png)
+![](https://image.leejay.top/2025/01/21/fa828129-2835-4a18-a08c-7bad38fce272.png)
 
 > 1. VM内的指令执行流程：`VM程序指令 -> VM操作系统内核 -> 宿主机管理程序 -> 宿主机内核。 `
 > 2. 容器会完全指定运行在宿主机上的同一个内核的系统调用，容器间是共享操作系统内核。
@@ -29,11 +29,11 @@ sort: 10
 
 ### Kubernetes Master & Node
 
-![](https://fn.leejay.top:9000/images/2025/01/21/0272bc6e-0ca7-42ea-9607-721b999715b0.png)
+![](https://image.leejay.top/2025/01/21/0272bc6e-0ca7-42ea-9607-721b999715b0.png)
 
 ### Kubernetes运行流程
 
-![](https://fn.leejay.top:9000/images/2025/01/21/7ea5c966-fccd-4b0a-8de5-47079332dda3.png)
+![](https://image.leejay.top/2025/01/21/7ea5c966-fccd-4b0a-8de5-47079332dda3.png)
 
 > 1. 在应用程序运行时，可以增加或减少副本数量。也可以交由kubernetes进行判断。
 > 2. kubernetes可能需要在集群中迁移你的容器，比如运行的节点失败时、为其他容器腾空间从节点移除时。
