@@ -2,7 +2,7 @@
 sort: 65
 ---
 # REST API
-### 基于proxy访问
+## 基于proxy访问
 
 ```shell
 # 查看集群信息
@@ -23,7 +23,7 @@ TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
 # 2. curl访问
 curl -H "Authorization: Bearer $TOKEN" https://kubernetes
 ```
-#### 简化交互
+### 简化交互
 ```yaml
 # 基于ambassador容器简化与API服务器的交互
 apiVersion: v1
@@ -39,7 +39,7 @@ spec:
     image: luksa/kubectl-proxy:1.6.2
 ```
 
-### 基于token访问
+## 基于token访问
 
 :::details 生成token
 ```shell
@@ -52,7 +52,7 @@ echo $token
 ```
 :::
 
-#### 访问集群
+### 访问集群
 
 ```bash
 curl -XGET -k https://{cluster_ip}:6443/api -H 'Authorization: Bearer ${TOKEN}'
@@ -73,6 +73,6 @@ curl -XGET -k https://{cluster_ip}:6443/api -H 'Authorization: Bearer ${TOKEN}'
 }
 ```
 
-### <a href="https://kubernetes.io/zh-cn/docs/reference/kubernetes-api/workload-resources/pod-v1/">api参考</a>
+## <a href="https://kubernetes.io/zh-cn/docs/reference/kubernetes-api/workload-resources/pod-v1/">api参考</a>
 
 

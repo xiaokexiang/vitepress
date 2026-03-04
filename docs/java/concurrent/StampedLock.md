@@ -58,7 +58,7 @@ public class StampedLockTest {
 > 1. 相比读写锁，`StampedLock`引入了乐观锁概念，只有变量发生改变才去加读锁。
 > 2. 除此之外`StampedLock`的方法都会返回一个`版本号：stamp（state），用来代表此时此刻的版本`。
 
-### StampedLock
+## StampedLock
 
 ```java
 // 移位基数
@@ -98,7 +98,7 @@ public StampedLock() {
 | SBITS = ~RBITS             | 1111 ... 1000 0000      | -128   |
 | **ORIGIN =  WBIT << 1**    | 0000 ... 0001 0000 0000 | 256    |
 
-### Wait Node
+## Wait Node
 
 ```java
 static final class WNode {
@@ -127,7 +127,7 @@ static final class WNode {
 
 ![](https://image.leejay.top/2025/01/21/12e29985-6d74-4fe0-a476-fae59093cdaa.png)
 
-### writeLock
+## writeLock
 
 ```java
 public long writeLock() {
@@ -159,7 +159,7 @@ public long writeLock() {
 > 3. 假设state是初始状态，`((s = state) & ABITS) == 0L`成立，那么执行CAS方法，尝试将`state`的值由`初始状态s改为s + WBIT(1000 0000)`，即`1 1000 0000`，表明获取写锁成功。那么返回`next`作为版本号。
 > 4. 若CAS修改失败，那么说明有另外一个线程获取了写锁，那么执行`acquireWrite`方法。
 
-#### acquireWrite
+### acquireWrite
 
 ```java
 // 获取CPU核心数
@@ -329,7 +329,7 @@ private long acquireWrite(boolean interruptible, long deadline) {
 >
 > 获取写锁的标志：将变量`state`的第8位设为1。反之为0表示没有获取写锁。
 
-#### unlockWrite
+### unlockWrite
 
 ```java
 public void unlockWrite(long stamp) {
@@ -381,7 +381,7 @@ private void release(WNode h) {
 
 ---
 
-### readLock
+## readLock
 
 ```java
 public long readLock() {
@@ -405,7 +405,7 @@ public long readLock() {
 > 3. 若①、②成立则尝试CAS修改`STATE`状态，将读线程数量 + 1。
 > 4. 若①、②、③全成立返回新的state，否则返回`acquireRead`的返回值
 
-#### acquireRead
+### acquireRead
 
 ```java
 private long acquireRead(boolean interruptible, long deadline) {
@@ -615,7 +615,7 @@ private long acquireRead(boolean interruptible, long deadline) {
 >    2. 若不是连续几个读线程第一个加入的读线程，会`进入到首个读节点的cowait属性中，形成链表结构`。
 > 3. 和写锁相同，如果长时间无法获取读锁，那么会阻塞当前线程，直到被唤醒继续自旋获取锁。
 
-#### unlockRead
+### unlockRead
 
 ```java
 public void unlockRead(long stamp) {
@@ -649,7 +649,7 @@ public void unlockRead(long stamp) {
 
 ---
 
-### tryOptimisticRead
+## tryOptimisticRead
 
 ```java
 // 锁的乐观读
@@ -664,7 +664,7 @@ public long tryOptimisticRead() {
 
 ---
 
-### validate
+## validate
 
 ```java
 // 校验版本号
@@ -690,7 +690,7 @@ void print() {
 
 ---
 
-### 总结
+## 总结
 
 - `StampedLock`不是基于AQS来实现的，但是其内部实现和AQS类似。
 - `StampedLock`不支持锁的重入、不支持条件变量且只有非公平实现。

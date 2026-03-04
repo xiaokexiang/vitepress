@@ -13,7 +13,7 @@ EXPLAIN SELECT * FROM T1 WHERE id = 1;
 
 ## 名词解释
 
-### id
+## id
 
 在一个查询语句中每个`SELECT`关键字都对应一个唯一的`id`。
 
@@ -21,7 +21,7 @@ EXPLAIN SELECT * FROM T1 WHERE id = 1;
 2. 关联查询Explain排在前面的记录就是驱动表，后面的是被驱动表。
 3. id为null的时候说明创建了临时表用于存放数据。
 
-### select_type
+## select_type
 
 | 类型                   | 含义                                                         |
 | :--------------------- | :----------------------------------------------------------- |
@@ -35,7 +35,7 @@ EXPLAIN SELECT * FROM T1 WHERE id = 1;
 | **DERIVED**            | 对于采用物化的方式执行的包含派生表的查询，该派生表对应的子查询的`select_type`就是`DERIVED` |
 | **MATERIALIZED**       | 当查询优化器在执行包含子查询的语句时，选择将子查询物化之后与外层查询进行连接查询时，该子查询对应的`select_type`属性就是`MATERIALIZED` |
 
-### type
+## type
 
 对应着单表的访问方式，<a href="###单表访问方法">上文的单表访问方法</a>中介绍了一部分，但仍包含部分没有介绍。
 
@@ -53,14 +53,14 @@ EXPLAIN SELECT * FROM T1 WHERE id = 1;
 | **unique_subquery** | 类似于`eq_ref`，针对查询优化器将IN子查询转换为EXISTS，且子查询可使用主键进行等值匹配 |
 | **index_subquery**  |   与`unique_subquery`类似，不过是子查询时使用的是普通索引    |
 
-### possible_keys和key
+## possible_keys和key
 
 `possible_keys`列表示在某个查询语句中，对某个表执行单表查询时可能用到的索引有哪些，`key`列表示实际用到的索引有哪些。
 
 > 1. 使用`index`访问方法来查询某个表时，`possible_keys`列是空的，而`key`列展示的是实际使用到的索引。
 > 2. `possible_keys`列中的值并不是越多越好，可能使用的索引越多，查询优化器计算查询成本会花费更长时间。
 
-### key_len
+## key_len
 
 `key_len`列表示当优化器决定使用某个索引执行查询时，该索引记录的最大长度，它是由这三个部分构成的：
 
@@ -70,7 +70,7 @@ EXPLAIN SELECT * FROM T1 WHERE id = 1;
 
 > 通过`key_len`我们可以区分某个使用联合索引的查询具体用了几个索引列。
 
-### ref
+## ref
 
 当使用索引列等值匹配的条件去执行查询时，`ref`列展示的就是与索引列作等值匹配的对象，可能是一个常数，一个列或者一个函数。
 
@@ -80,11 +80,11 @@ SELECT * FROM TABLE_A A, TABLE_B B WHERE A.id = B.id; # TABLE_B.id
 SELECT * FROM TABLE_A A, TABLE_B B WHERE A.id = UPPER(B.id); # func
 ```
 
-### rows
+## rows
 
 如果查询优化器决定使用全表扫描的方式对某个表执行查询时，执行计划的`rows`列就代表预计需要扫描的行数，如果使用索引来执行查询时，执行计划的`rows`列就代表预计扫描的索引记录行数。
 
-### filtered
+## filtered
 
 `MySQL`在计算驱动表扇出时采用的一个策略：
 
@@ -95,7 +95,7 @@ SELECT * FROM TABLE_A A, TABLE_B B WHERE A.id = UPPER(B.id); # func
 >
 > 在多表关联查询中，多用于计算驱动表的扇出值。
 
-### Extra
+## Extra
 
 `Extra`列是用来说明一些额外信息的
 
@@ -114,7 +114,7 @@ SELECT * FROM TABLE_A A, TABLE_B B WHERE A.id = UPPER(B.id); # func
 | **Using filesort**                   | 使用`文件排序`对结果进行排序（数据少时内存排序 ，多时磁盘排序），当能够使用`索引排序`的时候就不会使用文件排序 |
 | **Using temporary**                  | 借助临时表来完成一些功能（去重、排序 等）                    |
 
-### Json格式查看成本
+## Json格式查看成本
 
 ```sql
 EXPLAIN FORMAT=JSON SELECT common_field FROM TABLE GROUP BY common_field;
@@ -152,7 +152,7 @@ EXPLAIN FORMAT=JSON SELECT common_field FROM TABLE GROUP BY common_field;
 }
 ```
 
-### Extended EXPLAIN
+## Extended EXPLAIN
 
 ```sql
 SHOW WARNINGS;

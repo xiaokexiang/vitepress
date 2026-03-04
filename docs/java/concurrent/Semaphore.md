@@ -3,7 +3,7 @@ sort: 21
 lastUpdated: "2020-06-20T16:09:38+08:00"
 ---
 # Semaphore
-### acquire
+## acquire
 
 ```java
 // 共享锁可以立即响应中断异常
@@ -28,7 +28,7 @@ public final void acquireSharedInterruptibly(int arg)
 |         < 0         |           获取共享锁失败           |
 |         > 0         |  获取共享锁成功，后续获取可能成功  |
 
-#### tryAcquireShared
+### tryAcquireShared
 
 ```java
 protected int tryAcquireShared(int acquires) {
@@ -51,7 +51,7 @@ final int nonfairTryAcquireShared(int acquires) {
 >
 > 如果tryAcquireShared的返回值小于0，说明此时没有锁可以获取，执行入队等相关操作。
 
-#### doAcquireSharedInterruptibly
+### doAcquireSharedInterruptibly
 
 ```java
 private void doAcquireSharedInterruptibly(int arg)
@@ -91,7 +91,7 @@ private void doAcquireSharedInterruptibly(int arg)
 }
 ```
 
-#### setHeadAndPropagate
+### setHeadAndPropagate
 
 ```java
 private void setHeadAndPropagate(Node node, int propagate) {
@@ -120,7 +120,7 @@ private void setHeadAndPropagate(Node node, int propagate) {
 > 5. 接上段，如果`旧h.waitStatus  < 0`不成立，那么`新h.waitStatus < 0`条件何时成立呢？在`shouldParkAfterFailedAcquire`中会将前驱节点设置为`SIGNAL`状态后去park当前节点，所以只要先执行过`shouldParkAfterFailedAcquire`方法，后获取锁，那么`新h.waitStatus < 0`肯定成立，进入下一层判断，所以这里也可能会执行`doReleaseShared`方法尝试唤醒后继节点。
 > 6. `setHeadAndPropagate`的注释中说明了此方法确实会导致`不必要的唤醒操作`。
 
-#### doReleaseShared
+### doReleaseShared
 
 ```java
 // 唤醒后继节点并确认传播
@@ -157,7 +157,7 @@ private void doReleaseShared() {
 
 > 只要有线程获取锁设置了`新head`，`h == head`就会不成立导致再次循环，其目的是为了执行`unparkSuccessor(head)来唤醒有效后继节点`。
 
-### release
+## release
 
 ```java
 public final boolean releaseShared(int arg) {
@@ -193,7 +193,7 @@ protected final boolean tryReleaseShared(int releases) {
 
 >    即使调用多次release方法也不会产生影响，因为在`unparkSuccessor`方法中，会去获取next节点，如果没有就`从后往前查找有效节点`再唤醒，没有有效节点就不会唤醒。
 
-### 共享锁总结
+## 共享锁总结
 
 - 共享锁相比独占锁最大的不同在于`setHeadAndPropagate` 和 `doReleaseShared`。
 - `setHeadAndPropagate` 用于设置新head，及一定条件下调用`doReleaseShared`，且调用`doReleaseShared`会导致线程不必要的唤醒。

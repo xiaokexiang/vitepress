@@ -44,9 +44,9 @@ protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
 
 ---
 
-### FutureTask
+## FutureTask
 
-#### 类的继承结构
+### 类的继承结构
 
 ```java
 public class FutureTask<V> implements RunnableFuture<V> {
@@ -59,7 +59,7 @@ public interface RunnableFuture<V> extends Runnable, Future<V> {
 
 > `FutureTask`实现了`RunnableFuture`，而`RunnableFuture`继承了`Runnable`和`Future`。那么`FutureTask`即拥有`Runnable`特性，可以配合线程池执行，又拥有了`Future`特性，可以获取执行结果。
 
-#### 构造函数
+### 构造函数
 
 ```java
 public FutureTask(Callable<V> callable) {
@@ -83,7 +83,7 @@ public FutureTask(Runnable runnable, V result) {
 
 > 构造函数没有特别的，就是将传入的`Callable`对象赋值给成员变量，以及初始化`state`状态。
 
-#### 成员属性
+### 成员属性
 
 ```java
 // 用于get()返回的结果或抛出的异常
@@ -128,7 +128,7 @@ static final class WaitNode {
 
 ---
 
-#### run
+### run
 
 因为`FutureTask`间接实现了`Runnable`接口，所以在通过线程池执行时，会从`run`开始执行。
 
@@ -265,7 +265,7 @@ private void finishCompletion() {
 
 ---
 
-### cancel
+## cancel
 
 ```java
 // mayInterruptIfRunning true/false:
@@ -315,7 +315,7 @@ public boolean cancel(boolean mayInterruptIfRunning) {
 
 ---
 
-### awaitDone
+## awaitDone
 
 ```java
 // 等待完成 或因为中断或超时导致的终止
@@ -396,7 +396,7 @@ private int awaitDone(boolean timed, long nanos)
 
 ---
 
-### get
+## get
 
 ```java
 public V get() throws InterruptedException, ExecutionException {

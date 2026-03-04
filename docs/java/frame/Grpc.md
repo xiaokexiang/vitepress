@@ -8,23 +8,23 @@ lastUpdated: "2022-04-22T16:29:25+08:00"
 :::
 ---
 
-### Rpc简介
+## Rpc简介
 
 Rpc(remote procedure call)，即远程过程调用。服务器A上的服务想调用服务器B上的服务提供的方法，因为不存在于同一个内存空间，不能直接调用，需要通过网络来表达调用的语义和传达调用的数据。
 
 > Rpc像调用本地方法一样去调用远程方法。
 
-#### Http与Rpc
+### Http与Rpc
 
 Rpc是一个完整的远程调用方法，通常包括通信协议（http和tcp）和序列化协议（json、xml、protobuf等）。
 
-#### Http与Tcp
+### Http与Tcp
 
 为什么使用自定义tcp协议实现进程通信？
 
 http传输协议头中包含冗余的部分，且使用了文本编码（body仍是二进制编码），非常占用字节数。使用自定义tcp协议，能够有效提升传输效率，提升性能。
 
-#### Grpc与Restful
+### Grpc与Restful
 
 |              |     Grpc     |    Restful     |
 | :----------: | :----------: | :------------: |
@@ -34,7 +34,7 @@ http传输协议头中包含冗余的部分，且使用了文本编码（body仍
 
 ---
 
-### Grpc概述
+## Grpc概述
 
 ![](https://grpc.io/img/landing-2.svg)
 
@@ -44,11 +44,11 @@ http传输协议头中包含冗余的部分，且使用了文本编码（body仍
 
 ---
 
-### Grpc-Java
+## Grpc-Java
 
 使用Java语言作为客户端和服务端的语言来演示grpc的实现。
 
-#### pom配置
+### pom配置
 
 ```xml
 <dependency>
@@ -121,7 +121,7 @@ http传输协议头中包含冗余的部分，且使用了文本编码（body仍
 
 
 
-#### protobuf文件
+### protobuf文件
 
 ```proto buff
 syntax = "proto3";
@@ -144,7 +144,7 @@ message HelloResponse {
 
 > 此protobuf定义了：client传入name，server返回message。
 
-#### 生成java文件
+### 生成java文件
 
 执行maven命令：`mvn clean compile`。
 
@@ -152,7 +152,7 @@ message HelloResponse {
 
 > 编译后的文件在target目录下，如上图所示。
 
-#### 服务端
+### 服务端
 
 ```java
 public class GrpcServer extends HelloGrpc.HelloImplBase {
@@ -175,7 +175,7 @@ public class GrpcServer extends HelloGrpc.HelloImplBase {
 }
 ```
 
-#### 客户端
+### 客户端
 
 ```java
 public class GrpcClient {
@@ -209,7 +209,7 @@ public class GrpcClient {
 }
 ```
 
-#### 基于postman的客户端
+### 基于postman的客户端
 
 ![](https://image.leejay.top/2025/01/21/0476fe77-c51c-44e5-9acb-de680314b5c0.png)
 

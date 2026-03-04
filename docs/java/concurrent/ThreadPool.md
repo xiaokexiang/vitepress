@@ -5,15 +5,15 @@ lastUpdated: "2020-07-17T17:01:26+08:00"
 
 # ThreadPool
 
-#### 为什么使用线程池
+### 为什么使用线程池
 
 我们知道频繁的`单独创建线程`是很消耗系统资源的，而线程池中线程是可以`线程复用`的，不需要每次执行都重新创建，并且线程池可以提供`控制线程个数`等资源限制和管理的手段。
 
-#### 实现原理
+### 实现原理
 
 所谓线程池实现原理：`调用方不断向线程池中添加任务，线程池中有一组线程，不断的从队列中取任务`。典型的`生产者和消费者模型`。基于这样的原理，我们实现线程池需要使用到`阻塞队列`，避免无任务时轮询带来的资源消耗。
 
-#### 线程池类继承体系
+### 线程池类继承体系
 
 ![](https://image.leejay.top/2025/01/21/f2d57498-9e80-47c3-bfdd-3b6bda7d788b.png)
 
@@ -23,9 +23,9 @@ lastUpdated: "2020-07-17T17:01:26+08:00"
 
 ---
 
-### ThreadPoolExecutor
+## ThreadPoolExecutor
 
-#### 构造
+### 构造
 
 ```java
 // 阻塞队列，具体实现由构造函数决定
@@ -75,7 +75,7 @@ public ThreadPoolExecutor(int corePoolSize,
 >
 > `handler`：当`corePoolSize`、`maxPoolSize`和`workQueue`都满时的执行的拒绝策略。
 
-#### Worker
+### Worker
 
 ```java
 //Worker组成的HashSet
@@ -112,7 +112,7 @@ private final class Worker extends AbstractQueuedSynchronizer
 > 2. Worker继承`AbstractQueueSynchronizer`抽象类，用于`简化获取和释放围绕每个Worker执行的锁`，为了通过中断唤醒`空闲中的线程`而`非正在运行中的任务`(后面的代码会解释)，同时实现了自己的获取锁和释放锁的逻辑，是为了`避免锁的重入`。
 > 3. Worker初始化`设置state为-1`，直到真正启动时才会清除，是为了`防止该worker还没执行就被打断`。
 
-#### ctl变量
+### ctl变量
 
 ```java
 // 状态变量由 线程池运行状态(高3位)和线程池内有效线程数量(低29位)组成
@@ -186,11 +186,11 @@ private void decrementWorkerCount() {
 > ![线程迁移状态](https://image.leejay.top/2025/01/21/3c69d061-3c51-467f-a522-dac2bad1d6d8.png)
 ---
 
-### 线程池的关闭
+## 线程池的关闭
 
 我们先从`shutDown`和`shutDownNow`两个方法入手，先了解线程池如何关闭的。
 
-#### shutDown
+### shutDown
 
 ```java
 public void shutdown() {
@@ -274,7 +274,7 @@ private void interruptIdleWorkers(boolean onlyOne) {
 > 4. 中断`所有未被中断且空闲的worker`线程。
 > 5. 释放独占锁，并执行`tryTerminate`方法，处理线程池状态转换、执行`terminate`和唤醒等操作。
 
-#### tryTerminate
+### tryTerminate
 
 ```java
 final void tryTerminate() {
@@ -328,7 +328,7 @@ final void tryTerminate() {
 > 4. 只有`tryTerminate`方法才会将`ctl`修改为`TIDYING`或`TERMINATED`，且`自旋+CAS`直到成功。
 > 5. 我们需在`任何可能终止的操作之后`，调用`tryTerminate`方法。比如`减少worker线程数量`或`在shutdown期间从队列中删除任务`。
 
-#### await
+### await
 
 ```java
 // 阻塞直到三个条件满足其一：1. 所有任务在shutdown后完成 2. 超时 3.当前线程被中断
@@ -364,7 +364,7 @@ public boolean awaitTermination(long timeout, TimeUnit unit)
 >
 > 在`tryTerminate`方法中确实存在`唤醒因执行awaitTermination方法等待的线程`的代码。
 
-#### shutDownNow
+### shutDownNow
 
 ```java
 // 该方法会尝试中断所有正在执行的任务，返回正在等待执行的任务列表
@@ -447,7 +447,7 @@ private List<Runnable> drainQueue() {
 > 4. 中断`所有正在执行的线程及正在等待的线程(刚创建的state=-1worker线程不会被中断)`，并`在返回阻塞队列中的全部任务并清空队列`。
 > 5. 释放独占锁，并执行`tryTerminate`方法，处理线程池状态转换、执行`terminate`和唤醒等操作。
 
-#### 正确的关闭线程池
+### 正确的关闭线程池
 
 ```java
 @Slf4j
@@ -506,7 +506,7 @@ public class ThreadPoolSingleton implements Serializable {
 }
 ```
 
-#### 总结
+### 总结
 
 - `shutDown`和`shutDownNow`都会去`修改ctl状态`，并`中断线程`，最后调用`tryTerminate`方法。
 
@@ -525,9 +525,9 @@ public class ThreadPoolSingleton implements Serializable {
 
 ---
 
-### 线程池添加任务
+## 线程池添加任务
 
-#### execute
+### execute
 
 ```java
 // 提交任务给线程池，没有获取独占锁的操作
@@ -589,7 +589,7 @@ final void reject(Runnable command) {
 > 2. 如果处于`RUNNING态 && 任务加入阻塞队列`，不成功调用step3。若成功，因为execute方法没有加锁执行，所以需要`double-check`状态，如果`不处于RUNNING态则尝试移除刚添加的任务`，若`处于RUNNING态或移除失败`，判断当前`workerCount == 0`，成立则调用`addWorker`添加线程执行刚加入的任务。
 > 3. 执行至此，说明：要么`线程池不处于RUNNING态`，调用`addWorker`添加线程也会返回false，执行`reject`拒绝策略。要么`corePoolSize和阻塞队列已满`，那么调用`addWorker`当线程数达到`maxPoolSize`时也会返回false，执行`reject`拒绝策略。
 
-#### addWorker
+### addWorker
 
 ```java
 // 核心方法
@@ -740,9 +740,9 @@ private void addWorkerFailed(Worker w) {
 >       ② 线程池中`没有固定线程(即corePoolSize=0)`，但此时有任务需要执行的情况。
 ---
 
-### 线程池执行任务
+## 线程池执行任务
 
-#### runWorker
+### runWorker
 
 ```java
 // 因为worker对象本身就是实现了Runnable接口，所以线程启动时调用run方法
@@ -825,7 +825,7 @@ final void runWorker(Worker w) {
 > 4. 执行`afterExecute`钩子函数，清空task，将`workrer.completedTasks+1`
 > 5. 如果`getTask返回null`或`执行任务发生异常`，最终调用`processWorkerExit`方法。
 
-#### getTask
+### getTask
 
 ```java
 // 从阻塞队列中获取任务
@@ -882,7 +882,7 @@ private Runnable getTask() {
 > 4. 根据`wc > corePoolSize`返回`true/false`来决定调用的是`poll(time)/take()`，前者阻塞`keepAliveTime`，后者`一直阻塞直到获取了任务`。最终一定会有`小于等于corePoolSize数量的线程`一直在take处阻塞等待任务。
 > 5. 如果`获取的任务!=null`则返回，否则设置`timeOut=true`。发生异常则设置`timeOut=false`。
 
-#### processWorkerExit
+### processWorkerExit
 
 ```java
 // completedAbruptly =true表明runWorker是异常退出的
@@ -944,7 +944,7 @@ private void processWorkerExit(Worker w, boolean completedAbruptly) {
 
 ---
 
-### 线程池拒绝策略
+## 线程池拒绝策略
 
 | 策略                | 作用                                                         |
 | ------------------- | ------------------------------------------------------------ |
@@ -955,13 +955,13 @@ private void processWorkerExit(Worker w, boolean completedAbruptly) {
 
 ---
 
-### 线程池执行示意图
+## 线程池执行示意图
 
 ![](https://image.leejay.top/2025/01/21/0b3ec486-a379-45ee-b1de-dec23121df4b.png)
 
 ---
 
-### 线程池问题汇总
+## 线程池问题汇总
 
 - 为什么Worker类选择继承了AQS而不是直接使用ThreadPoolExecutor的ReentrentLock？
 

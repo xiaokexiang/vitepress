@@ -12,7 +12,7 @@ sort: 60
 DownwardAPI可以传递：`Pod名称`、`PodIP`、`容器Requests资源`、`Pod的标签`等。[点击此处查看更多参数](https://kubernetes.io/zh-cn/docs/concepts/workloads/pods/downward-api/)
 :::
 
-### 基于环境变量暴露
+## 基于环境变量暴露
 
 ```yaml
 apiVersion: v1
@@ -72,7 +72,7 @@ spec:
 >
 > ![](https://image.leejay.top/2025/01/21/c2336b1e-a8ef-419a-a81f-5b83e27498bc.png)
 
-### 基于卷暴露
+## 基于卷暴露
 
 ```yaml
 apiVersion: v1

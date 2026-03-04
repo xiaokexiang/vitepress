@@ -103,7 +103,7 @@ private static class Generation {
 > 4. `barrierCommand`用于每代线程通过屏障之前需要完成的事情（不会另起线程执行）。
 > 5. 每代都包含一定`parties`的线程，通过属性`broken = true`来表明当代线程全部作废。
 
-### nextGeneration
+## nextGeneration
 
 ```java
 private void nextGeneration() {
@@ -118,7 +118,7 @@ private void nextGeneration() {
 
 > 该方法的目的是为了`唤醒上一代的线程，并重置count及通过创建对象开启下一代`。
 
-### breakBarrier
+## breakBarrier
 
 ```java
 private void breakBarrier() {
@@ -133,7 +133,7 @@ private void breakBarrier() {
 
 > 与`nextGeneration`不同点在于：修改`Generation对象`参数，以及`没有创建下一代Generation`。
 
-### reset
+## reset
 
 ```java
 public void reset() {
@@ -152,7 +152,7 @@ public void reset() {
 
 ---
 
-### await
+## await
 
 ```java
 // 同一个线程可能多次调用await方法
@@ -266,7 +266,7 @@ private int dowait(boolean timed, long nanos) throws InterruptedException, 					
 
 ---
 
-### await(time)
+## await(time)
 
 ```java
 public int await(long timeout, TimeUnit unit)
@@ -301,7 +301,7 @@ private int dowait(boolean timed, long nanos){
 
 ---
 
-### 总结
+## 总结
 
 - CyclicBarrier和CountDownLatch类似，都要传入`int值来设置计数器（区别：前者>0，后者>=0）`。
 - CyclicBarrier的countDown和await都`由同一个线程实现`，而CountDownLatch由两种线程分别实现。

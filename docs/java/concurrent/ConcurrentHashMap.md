@@ -9,7 +9,7 @@ lastUpdated: "2020-07-14T16:58:36+08:00"
 - `JDK1.7`采用的是`将一个HashMap分成多个Segment`的方式，通过`继承ReentrentLock的Segment分段锁`实现线程安全。
 :::
 
-#### Node
+### Node
 
 ```java
 // Node数组，组成ConcurrentHashMap的主要结构
@@ -73,7 +73,7 @@ static final class TreeNode<K,V> extends Node<K,V> {
 > 4. `TreeNode`表示组成红黑树节点的结构，`存储key-value数据`。
 > 5. 成员变量`nextTable`在`扩容期间不为null`，表示扩容中下个需要使用的table。因为线程协助扩容的机制的存在，所以用`volatile`修饰，保证线程间的可见性。
 
-#### 构造
+### 构造
 
 ```java
 // 负数时表示为正在初始化或扩容：-1表示初始化或-(1+活动resize线程数量)
@@ -107,7 +107,7 @@ public ConcurrentHashMap(int initialCapacity,
 
 ---
 
-### put
+## put
 
 ```java
 public V put(K key, V value) {
@@ -309,7 +309,7 @@ private final void treeifyBin(Node<K,V>[] tab, int index) {
 
 ---
 
-### resize
+## resize
 
 ```java
 private static final int MIN_TRANSFER_STRIDE = 16;
@@ -560,7 +560,7 @@ private final void tryPresize(int size) {
 
 ---
 
-### get
+## get
 
 ```java
 public V get(Object key) {
@@ -602,14 +602,14 @@ public V get(Object key) {
 
 ---
 
-### 扩容时机
+## 扩容时机
 
 - 执行put()方法中如果`同一位置下节点数超过8个且数组长度小于64时`，会调用treeifyBin()方法进行扩容。
 - 执行put()方法中如果检测到节点的`hash值 = MOVED`，那么会调用`helpTransfer`进行协助扩容。
 - 执行put()方法中的`addCount`方法，如果数组元素发生改变有可能调用扩容。
 - 执行putAll()时如果`当前数组大小超过了扩容阈值`，会进行扩容。
 
-### 扩容时的读写操作
+## 扩容时的读写操作
 
 - 当数组正在扩容时，某线程调用了`get`方法，那么如果对应的table[i]已经全部迁移，那么只需要通过table[i]位置中的`FowardingNode.nextTable`属性获取新的table的引用。
 - 当数组正在扩容时，某线程调用了`put`方法，那么当前线程会调用`helpTransfer`方法协助进行扩容。

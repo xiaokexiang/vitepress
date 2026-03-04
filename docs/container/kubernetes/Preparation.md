@@ -17,21 +17,21 @@ sort: 10
 
 ## 容器的隔离机制实现
 
-### Linux命名空间
+## Linux命名空间
 
 每个进程只能看到自己的系统视图（文件、进程、网络接口、主机名等）。进程不单单只属于一个命名空间，而是属于`每个类型`的一个命名空间。类型包括`Mount(mnt)`、`Process ID(pid)`、`NetWork(net)`、`Inter-process communication(ipd)`、`UTS`、`User ID(user)`。
 
-### Linux控制组
+## Linux控制组
 
 基于`cgroups`实现，它是Linux内核功能，限制一个进程或一组进程的资源使用不超过被分配的量。
 
 ## Kubernetes基本概念
 
-### Kubernetes Master & Node
+## Kubernetes Master & Node
 
 ![](https://image.leejay.top/2025/01/21/0272bc6e-0ca7-42ea-9607-721b999715b0.png)
 
-### Kubernetes运行流程
+## Kubernetes运行流程
 
 ![](https://image.leejay.top/2025/01/21/7ea5c966-fccd-4b0a-8de5-47079332dda3.png)
 
@@ -40,9 +40,9 @@ sort: 10
 
 ## Kubernetes
 
-### 部署
+## 部署
 
-#### 基于minikube部署
+### 基于minikube部署
 
 - kubectl
 
@@ -71,7 +71,7 @@ newgrp docker
 minikube start
 ```
 
-#### 基于kubeadm部署
+### 基于kubeadm部署
 
 <a href="./kubeadm部署.md">kubeadm部署</a>
 

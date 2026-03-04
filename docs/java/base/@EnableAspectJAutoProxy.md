@@ -7,7 +7,7 @@ lastUpdated: "2021-05-12T16:18:28+08:00"
 最近在阅读Spring AOP的源码(基于Spring 5.2.8.RELEASE)中，发现`@EnableAspectJAutoProxy`注解中的`proxyTargetClass`参数并不如注释（`是否创建基于子类的CGLIB代理`）中说所的哪样生效。无论我设置成true/false都会使用CGLIB代理。
 :::
 
-### 自定义配置代码
+## 自定义配置代码
 
 ```java
 @Configuration
@@ -25,9 +25,9 @@ public class Test {
 }
 ```
 
-### 源码解析
+## 源码解析
 
-#### 问题的切入口
+### 问题的切入口
 
 我们知道Spring AOP是基于后置处理器实现对Bean的代理对象的创建，其核心类就是`AbstractAutoProxyCreator`。所以我们尝试从AOP核心类进行问题的解析。
 
@@ -103,7 +103,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 >
 > 但我产生了一个疑惑：这个`shouldProxyTargetClass()`是做什么的，为什么在没有设置`proxyTargetClass=true`前提下返回了true来走CGLIB代理？
 
-#### 问题的深入
+### 问题的深入
 
 书接上文，针对上面的问题，我们继续阅读相关源码。
 
@@ -142,7 +142,7 @@ public abstract class AutoProxyUtils {
 
 > 阅读完上述代码，我们可以了解到为什么`shouldProxyTargetClass()`返回了`true`，因为当前的BeanDefinition中包含了`PRESERVE_TARGET_CLASS_ATTRIBUTE`属性。那么：这个属性是什么时候设置的呢？
 
-#### 问题继续深入
+### 问题继续深入
 
 借助IDEA我们可以知道Spring在`ConfigurationClassPostProcessor.enhanceConfigurationClasses()方法`中设置了`PRESERVE_TARGET_CLASS_ATTRIBUTE`属性。
 
@@ -239,7 +239,7 @@ class ConfigurationClassEnhancer {
 >
 > 为什么`@Configuration(proxyBeanMethods=true)修饰的类需要被CGLIB代理进行增强呢？？`
 
-#### @Configuration
+### @Configuration
 经过上面的源码阅读，我们知道解决问题的关键在于@Configuration注解。
 
 ```java
@@ -307,7 +307,7 @@ public class SchoolConfiguration {
 >
 > 注意：如果@Bean的方法上加上了`@Scope("prototype")`注解时仍会生效，多次调用会返回多个对象。
 
-### 总结
+## 总结
 
 1. 因为@EnableAspectJAutoProxy的`proxyTargetClass`属性不生效，从而引出的`@Configuration`的`proxyBeanMethods`问题，如果我们需要使用JDK动态代理，那么我们除了设置`proxyTargetClass=false`、目标对象实现了接口，还需要设置`proxyBeanMethods = false`或不适用@Configuration注解修饰AOP相关配置类。
 2. 即使设置了`proxyBeanMethods = true`，如果在@Bean修饰的方法上添加了`@Scope("prototype")`，那么方法不会返回容器中的对象，对象会创建多次。

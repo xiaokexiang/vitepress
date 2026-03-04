@@ -5,7 +5,7 @@ lastUpdated: "2020-06-04T14:49:04+08:00"
 
 # ThreadLocal
 
-### 基本结构
+## 基本结构
 ::: tip
 - ThreadLocal类，底层由`ThreadLocalMap`实现，是Thread类的成员变量，因为`类的每个实例的成员变量都是这个实例独有的`，所以在不同的Thread中有不同的副本，每个线程的副本`只能由当前线程使用，线程间互不影响`。
 - 因为一个线程可以拥有多个ThreadLocal对象，所以其内部使用`ThreadLocalMap<ThreadLocal<?>, Object>`来实现。
@@ -43,7 +43,7 @@ public class ThreadLocal<T> {
 
 ---
 
-### 内存泄漏触发条件
+## 内存泄漏触发条件
 
 根据ThreadLocal堆栈示意图，我们可以推断处只要符合以下条件，ThreadLocal就会出现内存泄漏：
 
@@ -62,7 +62,7 @@ public class ThreadLocal<T> {
 
 ---
 
-### ThreadLocal其他问题
+## ThreadLocal其他问题
 
 - 为何key继承弱引用？
 

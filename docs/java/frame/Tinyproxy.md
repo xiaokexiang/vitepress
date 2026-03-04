@@ -6,7 +6,7 @@ lastUpdated: "2022-04-15T10:40:36+08:00"
 [Tinyproxy](http://tinyproxy.github.io/)是一个轻量级的HTTP / HTTPS代理守护进程，快速且小巧。
 :::
 
-### 安装
+## 安装
 
 使用[monokal/tinyproxy](https://hub.docker.com/r/monokal/tinyproxy)的镜像,dockerhub上的使用已经很清楚了，按照描述:
 
@@ -20,7 +20,7 @@ docker run -d --name='tinyproxy' -p <Host_Port>:8888 --env BASIC_AUTH_USER=<user
 - Timeout is optional.
 :::
 
-### 测试
+## 测试
 
 ```shell
 curl -x http://<your_username>:<your_password>@<tinyproxy_ip>:<tinyproxy_port> http://httpbin.org/ip
@@ -34,7 +34,7 @@ curl -x http://<your_username>:<your_password>@<tinyproxy_ip>:<tinyproxy_port> h
 
 ---
 
-### RestTemplate中使用
+## RestTemplate中使用
 
 ```xml
 <dependency>

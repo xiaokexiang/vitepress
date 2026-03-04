@@ -37,11 +37,11 @@ public interface BlockingDeque<E> extends BlockingQueue<E>, Deque<E> {
 
 ---
 
-### LinkedBlockingDeque
+## LinkedBlockingDeque
 
 我们以`LinkedBlockingDeque`为切入点了解`双端队列`的实现。
 
-#### 构造
+### 构造
 
 ```java
 public class LinkedBlockingDeque<E>
@@ -87,9 +87,9 @@ public class LinkedBlockingDeque<E>
 
 ---
 
-### 添加
+## 添加
 
-#### putFirst
+### putFirst
 
 ```java
 // 添加元素到队首，队列满就阻塞等待
@@ -140,7 +140,7 @@ private boolean linkFirst(Node<E> node) {
 > 1. 将元素添加到队首，如果队列满，`阻塞`等待直到将元素添加到队列中。
 > 2. 当添加节点是队列中的第一个节点时，`first = last = Node(prev = next = null, item != null)`，之后`linkFirst`就只会维护node和fist之间的关系，不会维护last节点。
 
-#### putLast
+### putLast
 
 ```java
 // 将元素添加到队尾
@@ -189,9 +189,9 @@ private boolean linkLast(Node<E> node) {
 > 1. 将元素添加到队尾，如果队列满，`阻塞`等待直到将元素添加到队列中。
 > 2. 和`putFirst`同理，第一个加入队列的节点需要特殊处理下，`linkLast`只会维护node和last之间的关系，不会维护first节点。
 
-### 获取
+## 获取
 
-#### takeFirst
+### takeFirst
 
 ```java
 // 获取队首元素
@@ -246,7 +246,7 @@ private E unlinkFirst() {
 > 1. takeFirst会获取队首元素，当队列为空时，`阻塞`等待直到队列不为空获取到元素。
 > 2. 获取队首元素的同时，会删除原来的first的节点。如果`删除后队列没有其他节点或队列刚初始化`，都需要处理last节点。否则只需要维护first节点，不用处理last节点。
 
-#### takeLast
+### takeLast
 
 ```java
 public E takeLast() throws InterruptedException {
@@ -294,7 +294,7 @@ private E unlinkLast() {
 > 1. takeLast会获取队尾元素，当队列为空时，`阻塞`等待直到队列不为空获取到元素。
 > 2. 获取队尾元素的同时，会删除原来的last的节点。如果`删除后队列没有其他节点或队列刚初始化`，都需要处理first节点。否则只需要维护last节点，不用处理first节点。
 
-### 总结
+## 总结
 
 - 除了内部维护的是`双向链表队列、一把独占锁和两个条件队列`外，其实现原理和`LinkedBlockingQueue`相同。
 - `LinkedBlockingDeque`无论操作队首还是队尾，都要考虑`队列内无节点`的情况。

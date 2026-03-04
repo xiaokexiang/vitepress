@@ -4,14 +4,14 @@ lastUpdated: "2020-07-11T14:53:34+08:00"
 ---
 # ConcurrentLinkedQueue
 
-#### 特性
+### 特性
 
 - 基于链表的无界线程安全队列。
 - 队列顺序是`FIFO`先进先出的顺序。队首是插入最久的元素，队尾是最新的元素。
 - 使用场景：`许多线程将共享对一个公共集合的访问，不支持null`。
 - 内部的并发操作通过`自旋 + CAS`实现。与`LinkedBlockingQueue`独占锁不同。
 
-#### 构造
+### 构造
 
 ```java
 public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
@@ -77,7 +77,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
 
 ---
 
-### 提示
+## 提示
 
 > 如果使用的是idea，会出现`head莫名奇妙被修改，节点引用指向自己的问题`。
 >
@@ -85,7 +85,7 @@ public class ConcurrentLinkedQueue<E> extends AbstractQueue<E>
 
 --- 
 
-### offer
+## offer
 
 ```java
 // 添加节点到队列中
@@ -141,13 +141,13 @@ class Test {
 >  5. 切换回线程A，`线程A执行casTai，tail指针被修改`，线程A返回true退出循环，切换到线程B，判断`t != (t = tail)`成立，此时`p = t = 更改后的tail`，继续循环执行`p.next = q = null`成立，执行casNext，将线程A的值也加入队列中。
 >6. `p == q`需要结合`poll`方法去解析(一些线程offer，一些poll)，当它成立的时候说明`p.next = p = q`，说明这种节点是哨兵节点，表示为需要删除或者过滤的节点。
 
-### offer执行流程
+## offer执行流程
 
 ![](https://image.leejay.top/2025/01/21/19f3ecf2-5a3e-4709-b9c8-250360cb24f3.jpg)
 
 ---
 
-### poll
+## poll
 
 ```java
 // 删除链表的头节点并返回该节点的item
@@ -205,13 +205,13 @@ final void updateHead(Node<E> h, Node<E> p) {
 >
 >    ![](https://image.leejay.top/2025/01/21/b2548c51-0d40-4f37-bb59-4d682ed684df.png)
 
-### poll执行流程
+## poll执行流程
 
 ![](https://image.leejay.top/2025/01/21/3a828b43-5b0a-47fa-b81c-a7b6ba5b55c8.jpg)
 
 ---
 
-### 总结
+## 总结
 
 - `ConcurrentlinkedQueue`是`非阻塞队列`，底层使用`自旋和CAS`来实现，`FIFO`且不允许`null`值。
 - `ConcurrentlinkedQueue`元素入队和出队操作都是线程安全的，但`遍历不是的线程安全的`，并且在判断元素是否为空的时候建议使用`isEmpty`而不是`sze == 0（遍历队列）`

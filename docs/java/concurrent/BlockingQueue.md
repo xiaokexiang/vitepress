@@ -5,13 +5,13 @@ lastUpdated: "2020-07-04T20:38:54+08:00"
 
 # BlockingQueue
 
-#### 概念
+### 概念
 
 `BlockingQueue`带`阻塞`功能的`线程安全`队列，但队列已满时会阻塞添加者，当队列为空时会阻塞获取者。它本身是一个接口，具体的功能由它的实现类来完成。
 
 ![](https://image.leejay.top/2025/01/21/83d4e005-9344-426b-8ffa-9949df939edb.png)
 
-#### 接口方法
+### 接口方法
 
 ```java
 public interface BlockingQueue<E> extends Queue<E> {
@@ -46,7 +46,7 @@ public interface BlockingQueue<E> extends Queue<E> {
 
 ```
 
-#### 方法对比
+### 方法对比
 
 | 方法        | 作用                     | 返回值  | 队列已满                      |
 | ----------- | ------------------------ | ------- | ----------------------------- |
@@ -65,9 +65,9 @@ public interface BlockingQueue<E> extends Queue<E> {
 
 ---
 
-### ArrayBlockingQueue
+## ArrayBlockingQueue
 
-#### 构造
+### 构造
 
 `有界阻塞队列`，我们将从类变量、构造函数、添加与获取角度来解析`ArrayBlockingQueue`的实现。
 
@@ -113,9 +113,9 @@ public class ArrayBlockingQueue<E> extends AbstractQueue<E>
 
 ---
 
-### 添加
+## 添加
 
-#### put
+### put
 
 ```java
 public void put(E e) throws InterruptedException {
@@ -158,7 +158,7 @@ private void enqueue(E x) {
 > 2. 获取独占锁后，如果队列已满，会将当前线程加入`notFull等待添加条件队列`。
 > 3. 若队列没有满，那么会调用`enqueue`将元素加入数组并修改相关变量。
 
-#### offer
+### offer
 
 ```java
 public boolean offer(E e) {
@@ -183,7 +183,7 @@ public boolean offer(E e) {
 >
 > offer(time)方法区别在于`awaitNanos阻塞一定时间，超时了队列仍满再返回false`。
 
-#### add
+### add
 
 ```java
 public boolean add(E e) {
@@ -203,9 +203,9 @@ public boolean add(E e) {
 
 ---
 
-### 获取
+## 获取
 
-#### take
+### take
 
 ```java
 public E take() throws InterruptedException {
@@ -250,7 +250,7 @@ private E dequeue() {
 > 1. take()整体流程与put类似，当队列没有元素时，会添加到`notEmpty`条件队列。
 > 2. 如果队列有元素就调用`dequeue`获取元素、唤醒`等待添加条件队列`的节点。
 
-#### poll
+### poll
 
 ```java
 public E poll() {
@@ -268,7 +268,7 @@ public E poll() {
 >
 > poll(time)与take()区别在于`awaitNanos`阻塞等待指定时长，`若队列仍为空返回null`。
 
-#### peek
+### peek
 
 ```java
 public E peek() {
@@ -291,7 +291,7 @@ final E itemAt(int i) {
 
 ---
 
-### 总结
+## 总结
 
 - `ArrayBlockingQueue`是有界（需要指定初始队列大小）的阻塞队列，最大容量不超过`Integer.MAX_VALUE`。
 - `ArrayBlockingQueue`遵循`FIFO先进先出的顺序规则`。
@@ -300,9 +300,9 @@ final E itemAt(int i) {
 
 ---
 
-### LinkedBlockingQueue
+## LinkedBlockingQueue
 
-#### 构造
+### 构造
 
 ```java
 public class LinkedBlockingQueue<E> extends AbstractQueue<E>
@@ -353,9 +353,9 @@ public class LinkedBlockingQueue<E> extends AbstractQueue<E>
 
 ---
 
-### 添加
+## 添加
 
-#### put
+### put
 
 ```java
 public void put(E e) throws InterruptedException {
@@ -418,7 +418,7 @@ private void signalNotEmpty() {
 > 2. 加入成功后会将`count + 1`，如果`count < capacity`，那么就唤醒`等待添加的条件队列中的节点`，最后释放put锁。
 > 3. 因为是两把锁，理论上`添加和获取的操作是可以同时进行的`，所以代码最后还需要判断下`count == 0`，如果成立说明此时恰好有一个数据，唤醒`等待获取队列中线程`来获取。
 
-#### offer
+### offer
 
 ```java
 public boolean offer(E e) {
@@ -462,7 +462,7 @@ public boolean offer(E e) {
 >
 > offer(time)在队列满的时候`等待指定时长`，如果`唤醒后队列还没有空间就返回false`。
 
-#### 获取
+### 获取
 
 - take
 
@@ -521,7 +521,7 @@ private E dequeue() {
 > 3. `c == capacity`时为何要唤醒`等待添加元素条件队列中的线程`？因为此时的`c = count + 1`，所以还缺一个节点队列才满，所以唤醒添加节点的条件队列。
 > 4. take()当`队列为空的时候会阻塞`，直到不为空获取元素。
 
-#### poll
+### poll
 
 ```java
 public E poll() {
@@ -556,7 +556,7 @@ public E poll() {
 >
 > poll(time)：`阻塞指定时长，唤醒后如果队列仍为空，那么返回null`。
 
-#### peek
+### peek
 
 ```java
 public E peek() {
@@ -586,7 +586,7 @@ public E peek() {
 
 ---
 
-### 总结
+## 总结
 
 - `LinkedBlockingQueue`是无界（可以不传递初始队列大小）队列，不指定容量时默认`Integer.MAX_VALUE`。
 - `LinkedBlockingQueue`的底层是由`链表组成的`，它`head.item = null, last.next  = null`是永远成立的。并且它也符合`FIFO`规则。
@@ -595,7 +595,7 @@ public E peek() {
 
 ---
 
-### PriorityBlockingQueue
+## PriorityBlockingQueue
 
 - `PriorityBlockingQueue`是不符合`FIFO`规则的队列，它是按照`元素的优先级从小到大出队列的`，是由元素实现`Comparator`接口来实现的。
 
@@ -609,13 +609,13 @@ public E peek() {
 
 - 底层是数组，但是用`数组实现了二叉堆`，排在`堆顶`的就是要出队的元素。
 
-### DelayQueue
+## DelayQueue
 
 - `延迟队列`，一个按照`延迟时间从小到大出队的PriorityBlockingQueue`。
 - DelayQueue中的元素必须要实现`Delayed`接口，复写`getDelay和compareTo`方法。
 - `未来时间 - 当前时间 `，值越小就越先出队，但前提是`时间差 <= 0`。
 
-### SynchronousQueue
+## SynchronousQueue
 
 - `SynchronousQueue`队列本身并没有容量的概念，`先调用put的线程会阻塞，直到另一个线程调用了take`。如果调用多次put，那么也需要调用同样次数的take，才能全部解锁。
 - `SynchronousQueue`支持公平和非公平实现，假设调用三次put，公平锁的情况下，`第一个take的线程对应着第一个put的线程`，非公平锁情况下，`第一个take的线程对应着第三个put的线程`。

@@ -7,7 +7,7 @@ lastUpdated: "2020-07-08T11:50:04+08:00"
 - `CopyOnWriteArrayList`是ArrayList的线程安全变体，通过`生成新的副本`来实现。
 :::
 
-### 构造
+## 构造
 
 ```java
 public class CopyOnWriteArrayList<E>
@@ -36,7 +36,7 @@ public class CopyOnWriteArrayList<E>
 
 ---
 
-### add
+## add
 
 ```java
 public boolean add(E e) {
@@ -73,7 +73,7 @@ public boolean add(E e) {
 
 ---
 
-### remove
+## remove
 
 ```java
 // 移除指定index元素
@@ -120,7 +120,7 @@ public E remove(int index) {
 
 ---
 
-### set
+## set
 
 ```java
 // 将数组的指定index改成指定值
@@ -158,7 +158,7 @@ public E set(int index, E element) {
 
 ---
 
-### get
+## get
 
 ```java
 // 获取某个index元素
@@ -177,7 +177,7 @@ private E get(Object[] a, int index) {
 
 ---
 
-### 总结
+## 总结
 
 - `CopyOnWriteArrayList`适用于`读多写少`的并发场景，它允许`null且可以重复`。
 - `CopyOnWriteArrayList`添加元素时建议使用`批量添加`，因为每次添加都要复制。

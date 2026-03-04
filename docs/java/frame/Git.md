@@ -8,14 +8,14 @@ lastUpdated: "2021-08-25T16:39:56+08:00"
 :::
 ## 本地仓库的操作
 
-### 本地仓库提交
+## 本地仓库提交
 
 ```shell
 # 本地提交
 git commit -m "message"
 ```
 
-### 分支
+## 分支
 
 分支的创建基于``基于某个提交及它的父提交`，当前所在的分支会用`*`标识
 
@@ -32,9 +32,9 @@ git branch -f <source_branch_name> <dest_branch_name|version num>
 git branch [-D|-d] <branch_name>
 ```
 
-### 合并
+## 合并
 
-#### merge
+### merge
 
 将某个分支A上`不被当前分支B包含的提交记录`合并到当前分支B上。会在当前分支B下创建一个新的合并记录，此时分支B会包含分支A的所有提交记录。
 
@@ -43,7 +43,7 @@ git branch [-D|-d] <branch_name>
 git merge ${branch_name}
 ```
 
-#### rebase
+### rebase
 
 相比于`merge`，`rebase`会从当前分支和目标分支的共同父节点P开始，将当前分支P点后的提交记录都复制到目标分支的最新节点后，最终看起来就像只有一条分支（rebase后的commit id和原来不一致了）。
 
@@ -55,11 +55,11 @@ git rebase [-i] ${branch_name}
 git rebase ${parent_branch} ${child_branch}
 ```
 
-### HEAD
+## HEAD
 
 HEAD 是一个对当前检出记录的符号引用，指向你`正在其基础上进行工作的提交记录`。HEAD 总是指向当前分支上最近一次提交记录。
 
-#### 分离HEAD
+### 分离HEAD
 
 一般HEAD和分支是一起前进的，通过checkout命令修改HEAD的指针，此时HEAD的状态是`detached`。又称为`detached head`，即分离HEAD。
 
@@ -69,7 +69,7 @@ git checkout ${commit_id}/${branch_name}
 HEAD -> branch -> commid_a => HEAD -> commit_id & branch -> commit_id
 ```
 
-#### HEAD移动
+### HEAD移动
 
 `~` 和`^` 都可以移动HEAD的位置，区别在于前者是往上移动几个位置，后者是当前HEAD拥有多个父节点时，HEAD^ 是当前分支的父节点，HEAD ^ 2是另一个父节点。
 
@@ -78,7 +78,7 @@ HEAD -> branch -> commid_a => HEAD -> commit_id & branch -> commit_id
 git checkout HEAD~^2~3
 ```
 
-#### 相对引用
+### 相对引用
 
 ```shell
 # 将HEAD切换到main的父提交记录
@@ -91,9 +91,9 @@ git checkout ~<num>
 git branch -f main ~3
 ```
 
-### 撤销变更
+## 撤销变更
 
-#### git restore
+### git restore
 
 撤销`未提交到本地仓库`的改动。
 
@@ -104,11 +104,11 @@ git restore .
 git checkout .
 ```
 
-#### git commit --amend
+### git commit --amend
 
 `适合提交到本地仓库的改动中错误部分`。如果上次提交的改动，有部分改错了，但是不想再多一次提交记录，那么可以使用`git commit -m "msg" --amend`命令提交当前改动，那么改动会被提交到本地仓库的同时，且只保留提交信息为"msg"的提交记录
 
-#### git reset
+### git reset
 
 `适用本地已提交撤销`。通过把分支记录回退几个提交记录来实现撤销改动。你可以将这想象成“改写历史”。原先的修改内容仍然存在，处于`未加入暂存区状态`。
 
@@ -119,7 +119,7 @@ git reset HEAD~1
 git reset [--hard|--soft] <version num>
 ```
 
-#### git revert
+### git revert
 
 `用于撤销远端已提交的更改（会产生回滚记录）`。使用`git revert`命令，在当前提交记录A后多个一个新的提交记录 B，这个`新的提交记录B引入了更改`（这更改是用来撤销A的更改内容），也就是恢复到提交记录B的父记录状态。
 
@@ -129,7 +129,7 @@ git revert HEAD
 A -> B => A -> B -> B' (A = B')
 ```
 
-### cherry-pick
+## cherry-pick
 
 将一些提交记录复制到当前所在位置（HEAD）后。
 
@@ -140,7 +140,7 @@ git cherry-pick <commit_id ...>
 
 > 相比rebase，更加灵活，可以`指定某个分支上的特定几个提交记录`，而不是类似`git rebase  -i`的图形化操作界面。
 
-### 交互的rebase
+## 交互的rebase
 
 相比`cherry-pick`基于提交记录的hash值进行工作，通过`--interactive（简写为-i）`操作图形化界面。
 
@@ -153,7 +153,7 @@ git rebase -i ${branch_name}
 
 ## 远端仓库的操作
 
-### remote tracking
+## remote tracking
 
 用于指定本地分支对应着哪个远端分支。
 
@@ -164,7 +164,7 @@ git checkout -b main o/main
 git branch -u o/main main
 ```
 
-### git fetch
+## git fetch
 
 - 从远程仓库下载本地仓库缺失的提交记录
 - 更新远程分支指针，将本地仓库中的远程分支更新成了远程仓库相应分支最新的状态
@@ -181,7 +181,7 @@ git fetch origin :main
 
 > git fetch 是单纯的下载操作，不会更新本地仓库的状态，只会将`本地的远端分支和远端分支保持同步`。
 
-### git pull
+## git pull
 
 等同于`git fetch + git merge`， 将远端分支的内容更新到本地，并将本地已存在的修改和更新内容进行merge合并操作。
 
@@ -195,7 +195,7 @@ git pull origin <remote> = git fetch origin <remote> + git merge origin/<remote>
 git pull origin <remote>:<local> = git fetch origin <remote>:<local> + git merge <local>
 ```
 
-### git push
+## git push
 
 ```shell
 # 格式

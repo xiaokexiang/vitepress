@@ -2,11 +2,11 @@
 lastUpdated: "2022-03-21T15:03:59+08:00"
 ---
 # Kube Eventer
-### 前言
+## 前言
 
 工作上需要持久化Pod的事件信息，我们知道事件默认是由etcd来进行存储的，但是事件的信息存储具有时效性（`默认1h，通过修改kube-apiserver的--event--ttl实现更长时间的存储`），且将etcd这种内存级别的组件作为持久化数据库也是不合理的，所以使用了阿里开源的这款事件告警组件<a href="https://github.com/AliyunContainerService/kube-eventer">kube-eventer</a>。
 
-### 使用方法
+## 使用方法
 
 - 创建表
 ```sql
@@ -122,7 +122,7 @@ metadata:
   namespace: kube-system
 ```
 
-### 注意事项
+## 注意事项
 
 - 注意事项一
 

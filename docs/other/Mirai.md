@@ -6,19 +6,19 @@ lastUpdated: 2022-03-07T10:21:01+08:00
 
 > <a href="https://github.com/mamoe/mirai">mirai</a> 是一个在全平台下运行，提供 QQ Android 协议支持的高效率机器人库。
 
-### 前言
+## 前言
 
 因为程序需要监听QQ群消息的缘故，在GITHUB上找到这款基于Android协议的机器人库，记录下安装的过程及踩坑的经历。
 
-### mirai安装
+## mirai安装
 
 官方提供了不同平台的<a   href="https://github.com/mamoe/mirai/blob/dev/docs/UserManual.md">安装教程</a>，并推荐使用纯控制台的版本（mcl-install），我们在window上安装，所以选择`mcl-installer-?-windows-amd64.exe`版本下载，下载后双击打开安装。一路回车安装，都选择默认值即可。进入cmd执行mcl命令，出现下图提示即为安装成功。
 
 ![](https://image.leejay.top/2025/01/22/e650bcf1-d1a0-4c8c-bfc5-449e0dace448.png)
 
-### 插件安装
+## 插件安装
 
-#### Http插件
+### Http插件
 
 因为程序需要监听QQ群的消息，于是我们选择安装官方推荐的Http插件<a href="https://github.com/project-mirai/mirai-api-http/releases">mirai-http-api</a>与我们程序进行交互。在mirai安装目录下执行如下命令：
 
@@ -34,7 +34,7 @@ mcl --update-package net.mamoe:mirai-api-http --type plugin --channel stable
 
 ![](https://image.leejay.top/2025/01/22/a34693b4-245b-4a05-82ad-8361a8134027.png)
 
-#### 插件配置
+### 插件配置
 
 ```yaml
 ## 配置文件中的值，全为默认值
@@ -79,9 +79,9 @@ adapterSettings:
 
 ---
 
-### 登录QQ账号
+## 登录QQ账号
 
-#### 登录验证
+### 登录验证
 
 我们启动mriai后，在控制台输入`login qq账号 qq密码`，一般会出现滑动验证弹窗，如下图所示：
 
@@ -91,7 +91,7 @@ adapterSettings:
 
 ---
 
-### 程序读取QQ信息
+## 程序读取QQ信息
 
 上面的账户登录成功后，控制台就会打印QQ中收到的信息，如果我们需要实现程序监听，那么还需要读取mirai的程序，这边提供一个基于python和websocket模式的demo。
 

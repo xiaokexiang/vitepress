@@ -4,9 +4,9 @@ sort: 50
 
 # Spring Security入门
 
-### 依赖与配置
+## 依赖与配置
 
-#### maven依赖
+### maven依赖
 
 ```xml
 <dependency>
@@ -19,7 +19,7 @@ sort: 50
 </dependency>
 ```
 
-#### Spring Security配置
+### Spring Security配置
 
 ```java
 @Configuration
@@ -123,7 +123,7 @@ public class UserManager implements UserDetailsManager {
 
 ## 用户接口与编码器
 
-### 获取用户信息
+## 获取用户信息
 
 Spring Security（简称SS）的用户信息由使用者通过实现框架提供的`UserDetailsService$loadUserByUsername()`接口方法提供。SS还提供了`UserDetails接口`，作为提供用户信息的核心接口。内嵌了`User类`作为`UserDetails`的默认实现。`UserDetailsManager`作为管理用户信息（增删改查）的默认内嵌管理器接口。而`InMemoryUserDetailsManager`则是默认的用户管理器实现。![](https://image.leejay.top/2025/01/21/472c9c6d-3219-430c-90fc-bfc25e4b78b1.png)
 
@@ -131,7 +131,7 @@ Spring Security（简称SS）的用户信息由使用者通过实现框架提供
 >
 > `InMemoryUserDetailsManager`默认是由`UserDetailsServiceAutoConfiguration`类构造并注入IOC容器。
 
-### PasswordEncoder编码器
+## PasswordEncoder编码器
 
 ```java
 public interface PasswordEncoder {
@@ -183,7 +183,7 @@ public abstract class WebSecurityConfigurerAdapter implements
 
 ## 自动配置
 
-### SecurityAutoConfiguration
+## SecurityAutoConfiguration
 
 ```java
 @Configuration(proxyBeanMethods = false)
@@ -206,7 +206,7 @@ public class SecurityAutoConfiguration {
 > 2. 注入配置类`SecurityProperties`
 > 3. 注入`SpringBootWebSecurityConfiguration`、`WebSecurityEnablerConfiguration`、`SecurityDataConfiguration`
 
-#### SpringBootWebSecurityConfiguration
+### SpringBootWebSecurityConfiguration
 
 ```java
 @Configuration(proxyBeanMethods = false)
@@ -225,7 +225,7 @@ public class SpringBootWebSecurityConfiguration {
 > 1. 当前环境是`Servlet`，当存在`WebSecurityConfigurerAdapter`时，不注入`SpringBootWebSecurityConfiguration`，不存在时则注入默认的`DefaultConfigurerAdapter`。
 > 2. 注入默认的`DefaultConfigurerAdapter`，同时指定`Order(Integer.MAX_VALUE - 5)`。
 
-#### WebSecurityEnablerConfiguration
+### WebSecurityEnablerConfiguration
 
 ```java
 @Configuration(proxyBeanMethods = false)
@@ -239,7 +239,7 @@ public class WebSecurityEnablerConfiguration {
 
 > 1. 当存在`WebSecurityConfigurerAdapter`、不存在`springSecurityFilterChain`且是`Servlet`环境时，激活`@EnableWebSecurity`注解。
 
-##### @EnableWebSecurity
+### @EnableWebSecurity
 
  ```java
 @Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
@@ -273,11 +273,11 @@ public @interface EnableWebSecurity {
 
 核心在于构建认证管理器`AuthenticationManager`。
 
-##### SecurityDataConfiguration
+### SecurityDataConfiguration
 
 自动添加Spring Security与Spring Data的集成。
 
-### SecurityFilterAutoConfiguration
+## SecurityFilterAutoConfiguration
 
 用于自动注入Spring Security的Filter过滤器类。
 
@@ -313,7 +313,7 @@ public class SecurityFilterAutoConfiguration {
 > 2. 在`SecurityFilterAutoConfiguration`完成后调用`SecurityAutoConfiguration`配置类。
 > 3. IOC容器中存在BeanName为`springSecurityFilterChain`时注入`DelegatingFilterProxyRegistrationBean`，在上文的`@EnableWebSecurity`中的`WebSecurityConfiguration`引入。
 
-#### DelegatingFilterProxyRegistrationBean
+### DelegatingFilterProxyRegistrationBean
 
 ```java
 public class DelegatingFilterProxyRegistrationBean extends AbstractFilterRegistrationBean<DelegatingFilterProxy>
@@ -363,7 +363,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 }
 ```
 
-### HttpSecurity入门
+## HttpSecurity入门
 
 ```java
 @Configuration
@@ -409,7 +409,7 @@ public class CommonSecurityConfig extends WebSecurityConfigurerAdapter {
 
 ## AuthenticationManager源码解析
 
-### UsernamePasswordAuthenticationFilter
+## UsernamePasswordAuthenticationFilter
 
 结合前文所示，用户的账户和密码认证是由`UsernamePasswordAuthenticationFilter`处理，所以我们以此切入。
 
@@ -455,7 +455,7 @@ public class UsernamePasswordAuthenticationFilter extends
 
 > 该类的主要作用就是拦截request请求并获取账号和密码，再将其封装到`UsernamePasswordAuthenticationToken`中。再交给`AuthenticationManager`去认证。
 
-### AbstractAuthenticationProcessingFilter
+## AbstractAuthenticationProcessingFilter
 
 ```java
 public abstract class AbstractAuthenticationProcessingFilter extends GenericFilterBean
@@ -518,7 +518,7 @@ public abstract class AbstractAuthenticationProcessingFilter extends GenericFilt
 > 3. 调用子类的`attemptAuthentication`进行认证操作，并设置session相关的策略（默认空实现）。
 > 4. 如果发生了异常或校验失败，调用失败处理器。继而判断是否需要跳过后面的过滤器，最终执行成功处理器。
 
-### AuthenticationManager初始化流程🔒
+## AuthenticationManager初始化流程🔒
 
 ```java
 public interface AuthenticationManager {
@@ -529,7 +529,7 @@ public interface AuthenticationManager {
 
 > 认证管理器顶级接口，上文中封装的`UsernamePasswordAuthenticationToken`就会交予`AuthenticationManager`的实现类来处理。如果验证成功就返回`Authentication`对象，否则就抛出异常。
 
-#### 1. SecurityAutoConfiguration
+### 1. SecurityAutoConfiguration
 
 >  请注意：下述的流程展示省略了大部分与`AuthenticationManager`初始化无关的代码！！
 
@@ -552,7 +552,7 @@ public @interface EnableWebSecurity {
 > 1. 因为容器中存在`WebSecurityConfigurerAdapter`，所以启用了`@EnableWebSecurity`注解。
 > 2. `@EnableWebSecurity`注解的核心在于`@EnableGlobalAuthentication`和`WebSecurityConfiguration`类。
 
-#### 2. WebSecurityConfiguration
+### 2. WebSecurityConfiguration
 
 ```java
 @Configuration(proxyBeanMethods = false)
@@ -617,7 +617,7 @@ final class AutowiredWebSecurityConfigurersIgnoreParents {
 > 3. `WebSecurity`处理`Filter过滤器链`相关，`HttpSecurity`处理http请求相关，都实现自`SecurityBuilder`。
 > 4. 如果容器中`SecurityConfigurer<Filter, WebSecurity>`的子类、实现类集合为空，那么就会创建默认的`WebSecurityConfigurerAdapter`对象并加入到容器中。
 
-##### 2.1 AbstractSecurityBuilder.build()🔒
+### 2.1 AbstractSecurityBuilder.build()🔒
 
 ```java
 public abstract class AbstractSecurityBuilder<O> implements SecurityBuilder<O> {
@@ -676,7 +676,7 @@ public abstract class AbstractConfiguredSecurityBuilder<O, B extends SecurityBui
 > 1. 核心在于找出所有需要初始化的`SecurityConfigurer`的子类对`SecurityBuilder`的子类进行初始化操作。
 > 2. 此处也会调用`WebSecurityConfigurerAdapter.init()`方法。
 
-#### 3.  @EnableGlobalAuthentication🎈
+### 3.  @EnableGlobalAuthentication🎈
 
 ```java
 /**
@@ -711,7 +711,7 @@ public class AuthenticationConfiguration {
 > 1. `@EnableGlobalAuthentication`的核心就是对`AuthenticationConfiguration`和`ObjectPostProcessorConfiguration`的注入。
 > 2. `AuthenticationConfiguration`中的两个Bean的注入只有没有子类复写`configure(AuthenticationManagerBuilder auth)`方法时才会初始化(init()方法)。
 
-##### 3.1 ObjectPostProcessorConfiguration
+### 3.1 ObjectPostProcessorConfiguration
 
 ```java
 @Configuration(proxyBeanMethods = false)
@@ -761,7 +761,7 @@ final class AutowireBeanFactoryObjectPostProcessor
 > 3.  `ObjectPostProcessorConfiguration`默认注入了`ObjectPostProcessor`的实现类`AutowireBeanFactoryObjectPostProcessor`到容器中。核心就是`初始化Bean`并自动注入。
 > 4.  使用`ObjectPostProcessor`的目的是为了解决`因为便于管理大量对象，没有暴露这些对象的属性，但是需要手动注册bean到容器中`的问题，注入到容器中的bean我们可以对其进行管理、修改或增强。
 
-##### 3.2 AuthenticationConfiguration🔒
+### 3.2 AuthenticationConfiguration🔒
 
 ```java
 @Configuration(proxyBeanMethods = false)
@@ -896,7 +896,7 @@ public class AuthenticationConfiguration {
 > 3. 尝试通过获取容器中的`AuthenticationManagerBuilder`并调用委派模式、建造者模式来创建`AuthenticationManager`。
 > 4. 如果仍没有，么会基于类型在容器中进行查找（找不到或多个会抛出异常），然后进行鉴权，如果成功返回`Authentication`，否则抛出异常。
 
-#### 4. WebSecurityConfigurerAdapter
+### 4. WebSecurityConfigurerAdapter
 
 ```java
 public abstract class WebSecurityConfigurerAdapter implements
@@ -1006,7 +1006,7 @@ public abstract class WebSecurityConfigurerAdapter implements
 >
 > 4. 和`ProviderManager`流程类似，`WebSecurity`和`HttpSecurity`也是被设置属性参数后通过`FilterChainProxy`构建成Filter过滤器注入到容器中。
 
-#### 5. ProvideManager
+### 5. ProvideManager
 
 此处主要解释`ProvideManager`、`AuthenticationManager`、`AuthenticationProvider`三者之间的联系。
 
@@ -1082,7 +1082,7 @@ public class ProviderManager implements AuthenticationManager, MessageSourceAwar
 >
 > 3. `ProviderManager`在鉴权是会先尝试调用用户指定的单个或多个`AuthenticationProvider（没有就跳过）`，然后尝试执行`AuthenticationManager`的实现类进行鉴权。
 
-#### 6. 流程图总结
+### 6. 流程图总结
 
 <iframe id="embed_dom" name="embed_dom" frameborder="0" style="height:400px;" src="https://www.processon.com/embed/60498ba67d9c08214c661ec2"></iframe>
 
@@ -1090,13 +1090,13 @@ public class ProviderManager implements AuthenticationManager, MessageSourceAwar
 
 ## Filter
 
-### Spring Security内置过滤器
+## Spring Security内置过滤器
 
 SpringSecurity中内置了一些Filter过滤器，可以通过`HttpSecurity`进行内置和自定义过滤器配置。
 
-#### Filter执行顺序
+### Filter执行顺序
 
-##### FilterComparator
+### FilterComparator
 
 ```java
 final class FilterComparator implements Comparator<Filter>, Serializable {
@@ -1169,7 +1169,7 @@ final class FilterComparator implements Comparator<Filter>, Serializable {
 > 1. 将一些过滤器按照指定顺序排列，从100开始依次叠加100，数值越小越靠前。
 > 2. 通过类名在map中查找并进行找到，判断和比较。
 
-##### HttpSecurity
+### HttpSecurity
 
 ```java
 public final class HttpSecurity extends
@@ -1211,7 +1211,7 @@ public final class HttpSecurity extends
 }
 ```
 
-#### 内置过滤器
+### 内置过滤器
 
 | 过滤器                                        | 作用                                                         |
 | --------------------------------------------- | ------------------------------------------------------------ |
@@ -1236,7 +1236,7 @@ public final class HttpSecurity extends
 | SessionManagementFilter                       | session管理器                                                |
 | FilterSecurityInterceptor                     | 决定了访问特定路径应该具备的权限（动态权限控制必备）         |
 
-### Spring Security过滤器链
+## Spring Security过滤器链
 
 在Spring Security Filter中是通过`FilterChainProxy`来管理多个代理不同路径的`SecurityFilterChain`过滤器链，同时`FilterChainProxy`是通过`DelegatingFilterProxy`加入到过滤器链中的一部分。如下图所示：
 
@@ -1308,7 +1308,7 @@ public abstract class GenericFilterBean implements Filter, BeanNameAware, Enviro
 
 粒度最小的权限单位。一般体现在接口的控制上，同一个权限可以属于不同的角色。
 
-### 基于配置的权限
+## 基于配置的权限
 
 ```java
 http.authorizeRequests()
@@ -1341,9 +1341,9 @@ public class RbacService {
 > 3. `anonymous()`表明用户不需要登录也可以访问，此用户默认拥有`ROLE_ANONYMOUS`权限。
 > 4. `PermitAll()`表明任何用户（匿名和非匿名）都能登录，`anonymous()`表明只有匿名用户（已登录用户不能登录）才能登录。
 
-### 基于注解的权限
+## 基于注解的权限
 
-#### 启动全局权限注解
+### 启动全局权限注解
 
 ```java
 @Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
@@ -1368,7 +1368,7 @@ public @interface EnableGlobalMethodSecurity {
 > 1. 注解的三种方式要选择一种开启。
 > 2. `EnableGlobalMethodSecurity`核心配置类是`GlobalMethodSecurityConfiguration`
 
-#### @PreAuthorize
+### @PreAuthorize
 
 ```java
 @PreAuthorize("hasAuthority('QUERY')")
@@ -1376,7 +1376,7 @@ public @interface EnableGlobalMethodSecurity {
 
 > 此方法要求用户具有`QUERY`权限才能访问，即使配置文件中没有对此路径的访问有权限要求。
 
-#### @PostAuthorize
+### @PostAuthorize
 
 ```java
 @PostAuthorize("returnObject.name == 'test'")
@@ -1384,7 +1384,7 @@ public @interface EnableGlobalMethodSecurity {
 
 > 判断当前返回的用户名是否为test，只有条件满足才会返回，否则抛出异常。
 
-#### @PreFilter
+### @PreFilter
 
 ```java
 @PreFilter(filterTarget = "ids", value = "filterObject%2==0")
@@ -1396,7 +1396,7 @@ public void delete(List<Integer> ids) {
 
 > 将传入的参数按照条件进行过滤
 
-#### @PostFilter
+### @PostFilter
 
 ```java
 @PostFilter("filterObject.name == authentication.name")
@@ -1438,7 +1438,7 @@ public interface SecurityContextHolderStrategy {
 }
 ```
 
-### SecurityContextHolder源码解析
+## SecurityContextHolder源码解析
 
 ```java
 public class SecurityContextHolder {
@@ -1478,7 +1478,7 @@ public class SecurityContextHolder {
 }
 ```
 
-### ThreadLocalSecurityContextHolderStrategy
+## ThreadLocalSecurityContextHolderStrategy
 
 ```java
 // 默认的实现类，基于ThreadLocal实现线程隔离，不清楚可以查看ThreadLocal源码
@@ -1512,7 +1512,7 @@ final class ThreadLocalSecurityContextHolderStrategy implements SecurityContextH
 }
 ```
 
-### SecurityContextImpl
+## SecurityContextImpl
 
 ```java
 public class SecurityContextImpl implements SecurityContext {
@@ -1599,9 +1599,9 @@ protected InterceptorStatusToken beforeInvocation(Object object) {
 > 1. 通过创建`FilterInvocationSecurityMetadataSource`实现类指定当前url的权限是什么。
 > 2. 通过创建`AccessDecisionManager`的实现类指定决策管理器策略。
 
-### 安全权限数据源
+## 安全权限数据源
 
-#### 自定义权限数据源
+### 自定义权限数据源
 
 ```java
 public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
@@ -1633,9 +1633,9 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
 > 此处只是模拟赋予url的权限操作，实际业务可能从数据库或其他第三方获取。
 
-### 投票模型
+## 投票模型
 
-#### 自定义AccessDecisionManager
+### 自定义AccessDecisionManager
 
 ```java
 public interface AccessDecisionManager {
@@ -1677,7 +1677,7 @@ public class UrlAccessDecisionManager implements AccessDecisionManager {
 > 2. `ConsensusBased`基于共识的决策器。 用户持有同意的角色数量多于禁止的角色数。
 > 3. `UnanimousBased` 基于一致的决策器。 用户持有的所有角色都同意访问才能放行。
 
-#### 自定义AccessDecisionVoter
+### 自定义AccessDecisionVoter
 
 `AccessDecisionManager`的实现类中支持`List<AccessDecisionVoter<?>> decisionVoters`作为参数传入，所以我们也可以通过创建`AccessDecisionVoter`的实现类创建自定义投票器。
 
@@ -1694,9 +1694,9 @@ public interface AccessDecisionVoter<S> {
 }
 ```
 
-### 异常控制器
+## 异常控制器
 
-#### 未登录异常控制器
+### 未登录异常控制器
 
 ```java
 public class AdminAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -1714,7 +1714,7 @@ public class AdminAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 > 处理未登录情况下所有访问的接口（放行除外）
 
-#### 无权限异常控制器
+### 无权限异常控制器
 
 ```java
 public class UrlAccessDeniedHandler implements AccessDeniedHandler {
@@ -1733,7 +1733,7 @@ public class UrlAccessDeniedHandler implements AccessDeniedHandler {
 
 > 处理登录后没有权限访问的路径
 
-### Spring Security config
+## Spring Security config
 
 ```java
 @Configuration

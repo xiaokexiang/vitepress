@@ -69,7 +69,7 @@ Sync(int count) {
 
 ---
 
-### await
+## await
 
 ```java
 public final void acquireSharedInterruptibly(int arg) throws InterruptedException {
@@ -93,7 +93,7 @@ protected int tryAcquireShared(int acquires) {
 
 ---
 
-### countDown
+## countDown
 
 ```java
 // countDown方法不支持传参，每次只能减1
@@ -128,7 +128,7 @@ protected boolean tryReleaseShared(int releases) {
 
 ---
 
-### await(time)
+## await(time)
 
 ```java
 // 传入时间及时间单位
@@ -152,7 +152,7 @@ protected int tryAcquireShared(int acquires) {
 
 >  await(long timeout, TimeUnit unit)：`方法返回boolean值，主线程阻塞指定时常后被唤醒，查看state = 0是否成立，成立返回true主线程继续执行，否则执行失败。`
 
-### 总结
+## 总结
 
 - 使用场景：当`某个量化为数字的条件被满足后`，调用await的线程才可以继续开始执行
 

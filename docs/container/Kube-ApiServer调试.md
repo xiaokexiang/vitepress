@@ -6,7 +6,7 @@ kube-apiserver 是 Kubernetes 控制平面的核心组件，负责处理所有 A
 本文旨在演示如何对 Kubernetes 的核心组件 **kube-apiserver** 进行本地调试和远程 Debug 调试。
 ## 准备
 
-### 环境
+## 环境
 
 | 组件                                                         | 版本                                   | 作用                                     |
 | ------------------------------------------------------------ | -------------------------------------- | ---------------------------------------- |
@@ -15,7 +15,7 @@ kube-apiserver 是 Kubernetes 控制平面的核心组件，负责处理所有 A
 | [delve](https://github.com/go-delve/delve/tree/master/Documentation/installation) | 1.21.2                                 | go debugger                              |
 | docker-ce                                                    | 20.10.9                                | 集群部署                                 |
 
-### 代码
+## 代码
 
 ```bash
 # 设置ggoproxy
@@ -26,7 +26,7 @@ $ git clone -b release-1.21.1 https://github.com/kubernetes/kubernetes.git
 
 ## 调试
 
-### 本地部署集群调试
+## 本地部署集群调试
 
 - 安装ETCD
 
@@ -125,7 +125,7 @@ API server listening at: [::]:2345
 
 > 查看dlv --listen=:2345启动的终端显示，显示apiserver的启动日志，且无报错即为正常。
 
-### 远端集群调试
+## 远端集群调试
 
 - 编译apiserver
 ```bash
@@ -158,7 +158,7 @@ dlv --listen=:2345 --headless=true --api-version=2 exec /root/kube-apiserver -- 
 
 ![goLand](https://image.leejay.top/2025/05/22/5f35c3b9-eca8-4c65-a98c-87b03fa7f84f.jpeg)
 
-#### 参考来源
+### 参考来源
 
 - https://blog.haohtml.com/archives/34454/
 - https://blog.csdn.net/a1369760658/article/details/135147441

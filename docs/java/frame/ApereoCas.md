@@ -22,24 +22,24 @@ CAS从结构上包含两部分：CAS Server 和 CAS Client
 ## 安装
 因为我是Client端提供者，Server端由客户提供，所以搭建Server端的时候只保留主要功能。至于JDK加密和配置数据库之类的文章，网上一搜一大把，在此不做记录。
 
-### CAS Server端部署
+## CAS Server端部署
 
-#### 下载cas-overlay-template
+### 下载cas-overlay-template
 
 ``` bash
 # 客户方是5.3分支
 git clone -b 5.3 https://github.com/apereo/cas-overlay-template
 ```
 
-#### 解压与打包
+### 解压与打包
 
 解压cas-overlay-template文件夹(下称作根目录/)，并进入打开cmd窗口，执行`mvn clean package命令(需要提前配置好全局maven命令，并且设置好阿里云仓库代理)。建议将根目录下的pom.xml文件中的<repository>相关的注释即可。`
 
-#### 新建目录
+### 新建目录
 - 新建src/main/java & src/main/resources文件夹。
 - 复制cas-overlay-template/target/cas/WEB-INF/classes目录下的`services`文件夹和`application.properties`文件到src/main/resources文件夹中。
 
-#### 文件修改
+### 文件修改
 
 - 修改src/main/resources/services/HTTPSandIMAPS-10000001.json文件
 
@@ -68,13 +68,13 @@ cas.logout.followServiceRedirects=true
 cas.authn.accept.users=admin123456::admin123456
 ```
 
-#### 执行命令
+### 执行命令
 
 ``` bash
 # 根目录下执行
 build.cmd debug
 ```
-### CAS Client端部署
+## CAS Client端部署
 `我用的是注解+SpringBoot的方式搭建Cas Client客户端。需要先引入jar包并添加相应注解。`
 
 ``` java
@@ -125,12 +125,12 @@ public class CasClientConfigurations {
 
 ## 分析
 
-### 登陆
+## 登陆
 `其实官网的一张图就解释的非常清楚了，很形象。在此贴出该图: `
 
 <img src="https://image.leejay.top/2025/01/21/b5a60ee9-8ac2-4ee0-96e5-a6ed7c6dea7c.png"/>
 
-### 超时分析
+## 超时分析
 `目前存在三种控制超时时间的参数，分别是Client Session timeout，TGT timeout和ST timeout。`
 
 - Client Session
@@ -158,13 +158,13 @@ cas.ticket.st.numberOfUses=1
 cas.ticket.st.timeToKillInSeconds=30
 ```
 
-#### 不同情况超时登出流程图
+### 不同情况超时登出流程图
 
 ![](https://image.leejay.top/2025/01/21/c8be0561-90ae-48bd-9d7a-803da14bdeac.png)
 
 >   推荐Cas Client的session timeout <= TGT timeout
 
-### 登出
+## 登出
 
 1. 登出首先需要清除Cas Client的session，这样在校验的时候因为不存在session，需要重定向校验。
 2. 其次需要调用Cas Server logout接口，用于清除保存在Cas Server中Client 凭证，这样在Client请求时，Server不会重新生成TGT导致不会重新校验。

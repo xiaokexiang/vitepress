@@ -1,6 +1,6 @@
 # 通过zerotier访问局域网同网段设备
 
-### 物理网卡
+## 物理网卡
 ```bash
 #!/bin/bash
 
@@ -58,7 +58,7 @@ case "$1" in
 esac
 
 ```
-### ovs
+## ovs
 
 ```bash
 #!/bin/bash
@@ -117,7 +117,7 @@ case "$1" in
 esac
 
 ```
-### 设置为系统服务
+## 设置为系统服务
 ```bash
 bash -c 'cat > /etc/systemd/system/zerotier-nat.service << EOF
 [Unit]

@@ -7,7 +7,7 @@ sort: 40
 - k8s的卷是Pod的一个组成部分，不能单独创建和删除。Pod内的每个容器都可以使用卷，但必须要先将它挂载在每个需要访问它的容器中。
 :::
 
-### 卷的类型
+## 卷的类型
 ```mermaid
 graph TB
 a["卷类型"] --> b["emptyDir"]
@@ -29,7 +29,7 @@ a --> h["nfs"]
 | configmap| 存储环境变量、配置文件、应用程序参数等配置信息 |
 | secret   | 存储数据库密码、API 密钥、TLS 证书等敏感信息。|
 
-#### emptyDir
+### emptyDir
 
 ```yaml
 apiVersion: v1
@@ -61,7 +61,7 @@ spec:
 
 > 在Pod中创建两个容器，基于挂载实现一个容器负责向指定目录写入文件内容，一个容器负责读取这个目录下的文件内容。
 
-#### gitRepo
+### gitRepo
 
 相比emptyDir，gitRepo只是最初用Git仓库的内容填充了emptyDir。但是并不能和对应的仓库进行同步，卷重的文件不会被更新，但如果Pod是基于ReplicationController（或ReplicaSet）进行管理，那么通过删除Pod，重新创建时卷则会包含最新的内容。
 
@@ -91,7 +91,7 @@ spec:
 
 > 或使用`gitsync sidecar`实现不删除重启容器，将更新内容挂载到目录实现动态更新。
 
-#### hostPath
+### hostPath
 
 hostPath卷指向节点文件系统上的特定文件或者目录。在同一个节点上运行并在其hostPath卷中使用相同路径的Pod可以看到相同的文件。
 
@@ -126,7 +126,7 @@ spec:
 
 > 我们需要查看Pod在哪个node节点，那么就去node节点上的文件系统查看。
 
-#### emptyDir
+### emptyDir
 
 当Pod分配到某个Node上时，`emptyDir`卷会被创建，并且在Pod在该节点上运行期间，卷一直存在。Pod中的容器都可以读写`emptyDir`卷中相同的文件（容器共享）。 当Pod因为某些原因被从节点上删除时，`emptyDir`卷中的数据也会被永久删除。
 
@@ -159,7 +159,7 @@ spec:
 
 > 只要Pod一直存在不被删除，那么emptyDir也会一直存在（即使容器崩溃也不受影响）
 
-#### gitRepo
+### gitRepo
 
 相比emptyDir，gitRepo只是最初用Git仓库的内容填充了emptyDir。但是并不能和对应的仓库进行同步，卷重的文件不会被更新，但如果Pod是基于ReplicationController（或ReplicaSet）进行管理，那么通过删除Pod，重新创建时卷则会包含最新的内容。
 
@@ -189,7 +189,7 @@ spec:
 
 > 或使用`gitsync sidecar`实现不删除重启容器，将更新内容挂载到目录实现动态更新。
 
-#### hostPath
+### hostPath
 
 `hostPath`卷能将主机节点文件系统上的文件或目录挂载到你的Pod中（因为存在安全风险，尽量避免使用hostPath）。
 
@@ -234,7 +234,7 @@ spec:
 | `CharDevice`        | 在给定路径上必须存在的字符设备。                             |
 | `BlockDevice`       | 在给定路径上必须存在的块设备。                               |
 
-#### 持久卷与持久卷声明
+### 持久卷与持久卷声明
 
 ![](https://image.leejay.top/2025/01/21/9969a10e-3de7-4a00-96af-6084f1bbff8f.png)
 
@@ -242,7 +242,7 @@ spec:
 >
 > 持久卷声明可以当作Pod中的一个卷来使用，其他用户不能使用相同的持久卷（除非先删除）。
 
-##### 持久卷
+### 持久卷
 
 `Persistent Volume（pv）`持久卷，相对于`Volumes`存储一些有必要保存的数据，它主要是为了管理集群的存储。且它相对于Pod独立创建。
 
@@ -274,7 +274,7 @@ spec:
           - k8s-node1
 ```
 
-##### 持久卷声明
+### 持久卷声明
 
 **`持久卷（PersistentVolume，PV）`** 是集群中的一块存储，可以由管理员事先制备，或者使用存储类（Storage Class）来动态制备。
 
@@ -367,7 +367,7 @@ spec:
 | ~~**Recycled**~~ | 已被废弃。取而代之的建议方案是使用动态制备。              |
 | **Deleted**      | 会将PV从集群中移除，默认回收策略。                        |
 
-#### NFS
+### NFS
 
 支持将NFS(网络文件系统)挂在到你的Pod中，nfs卷的内容在删除Pod时会被保存，卷只是被卸载。这意味着`nfs`卷可以被预先填充数据，并且这些数据可以在Pod之间共享。
 
@@ -426,7 +426,7 @@ spec:
             claimName: nfs-pvc # 指定基于nfs创建的pvc的名称
 ```
 
-#### configMap
+### configMap
 configMap用于存储非敏感的数据，比如配置文件，环境变量等。
 
 ```yaml
@@ -504,7 +504,7 @@ spec:
 > 1. configMap中的value作为环境变量时，他的改动不会通知到pod.
 > 2. configMap中的value使用volumeMounts挂载文件的形式绑定，改动则会通知pod(subPath除外)．
 
-#### secret
+### secret
 secret用于存储敏感数据，并使用base64编码．
 
 ```yaml
@@ -583,7 +583,7 @@ spec:
 ```
 > 1. 挂载到pod的value会在自动被解密为明文．
 
-#### subPath
+### subPath
 单个pod中一个共享卷供多个容器挂载使用，subPath属性可用于指定所引用的卷内的子路径，而不是根路径．主要用于`一个卷挂载多个路径或挂载特定目录的特定路径，并希望容器内原有目录不被覆盖`
 ```yaml
 apiVersion: v1
@@ -615,7 +615,7 @@ spec:
           - key: "hello.properties"
             path: "hello.properties"
 ```
-#### subPathExpr
+### subPathExpr
 使用subPathExpr字段可以基于`Downward api`环境变量实现构造subPath目录名，与subPath是互斥的
 
 ```yaml

@@ -98,7 +98,7 @@ func test7() {
 > 5. 若一个goroutine一直从`通道`中读取数据，但已经没有goroutine往`同一个通道中`发送数据，且`此通道没有关闭`，那么会出现`all goroutines are asleep - deadlock!`死锁的panic。
 > 6. goroutine泄漏：对于无缓存通道，若有多个goroutine向通道发送数据，但是只接收了其中一个goroutine的数据，其他发送方发送的数据没有goroutine来接收。`泄露的goroutine不会自动回收`。
 
-### 单向通道类型
+## 单向通道类型
 
 ```go
 // <-chan int表示可以从通道中获取数据
@@ -241,7 +241,7 @@ func test13() {
 > 3. 若多个通道同时到达，select会随机选择一个，若没有任何通道准备就绪，且存在default分支，那么会执行default分支，否则select会阻塞到至少有一个通道准备就绪。
 > 4. time.Tick()与time.NewTicker()都用于创建一个定时器，每隔一段时间触发一次操作。区别主要在于返回值类型，前者返回`<- chan time.Time`只读通道，后者返回`*time.Ticker`一个定时器对象。定时器如果不`显式的停止`，那么对应的goroutine仍会一直执行（导致泄漏）,所以`Tick()`仅适用于`整个生命周期都需要时`才使用，否则建议使用`NewTicker()`，并显示的调用`Stop()`来阻止泄漏。
 
-### 并发目录遍历
+## 并发目录遍历
 
 ```go
 func test15() {

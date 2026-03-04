@@ -8,7 +8,7 @@ sort: 26
 ![](https://image.leejay.top/2025/01/21/0fae77ec-b91c-4860-af8a-44d57bdf0c20.png)
 :::
 
-### 安装ingress控制器
+## 安装ingress控制器
 
 执行下述命令，等待ingress控制器安装，如下图所示即为成功。
 ```bash
@@ -17,7 +17,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 
 ![ingress-controller](https://image.leejay.top/2025/01/21/9eb28781-530f-4862-89a5-66a95369a894.png)
 
-### 创建ingress服务
+## 创建ingress服务
 
 在部署ingress服务之前，我们需要先部署service服务，设置type为`ClusterIP`，确保通过ServiceIP + Port能够正常访问Pod。
 

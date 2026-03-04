@@ -36,7 +36,7 @@ public class ReentrantReadWriteLock  implements ReadWriteLock {
 
 > 相比于`Semaphore`，`ReentrantReadWriteLock`采用共享和独占结合的方法。Semaphore就像是一个令牌桶，谁都可以拿取令牌执行任务，谁都可以归还令牌。它不会记录是哪个线程获取了锁，而`ReentrantReadWriteLock`会记录，只有持有相关锁才能来释放锁。
 
-#### state
+### state
 
 与独占锁、共享锁的state的使用不同，因为需要表示两种状态，所以对`int型state`做了`高低位切割`，分别表示不同的状态。已知`int=4byte= 32bit`，所以`高16位表示读，低16位表示写`。他们的取值范围在`[0 ~ 2^16 - 1]`，进而我们可以得出，最多有`2^16 -1`个线程可以获取读锁。
 
@@ -81,7 +81,7 @@ abstract static class Sync extends AbstractQueuedSynchronizer {
 >
 > 5. `如果c 不为 0，当写count = 0时，读count > 0成立`。即读锁已经获取。
 
-#### ThreadLocalHoldCounter
+### ThreadLocalHoldCounter
 
 除了需要记录锁被拿取的总次数，还需要记录每个线程分别拿走多少，所以我们使用`ThreadLocal`，将记录的工作交给线程自己。
 
@@ -121,7 +121,7 @@ abstract static class Sync extends AbstractQueuedSynchronizer {
 
 ---
 
-### WriteLock
+## WriteLock
 
 我们从写锁开始入手，写锁就是独占锁的体现。
 
@@ -201,7 +201,7 @@ abstract static class Sync extends AbstractQueuedSynchronizer {
 >
 > 4. 尝试CAS修改state失败了。
 
-#### tryWriteLock
+### tryWriteLock
 
 ```java
 final boolean tryWriteLock() {
@@ -225,7 +225,7 @@ final boolean tryWriteLock() {
 
 > 与tryAcquire类似，是`非公平、一次性`的获取写锁，写锁计数默认加1。
 
-#### release
+### release
 
   写锁的释放流程与独占锁释放类似，只是tryRelease不同，我们只需要关注AQS的子类实现即可
 
@@ -267,7 +267,7 @@ final boolean tryWriteLock() {
 
 ---
 
-### ReadLock
+## ReadLock
 
 读锁就是共享锁的体现，我们直接查看ReentrantReadWriteLock中AQS的子类的`tryAcquireShared`和`tryReleaseShared`实现即可。
 
@@ -396,7 +396,7 @@ final boolean tryWriteLock() {
   >
   >    `HoldCounter.count`：将每个线程获取的读锁次数记录在本地线程中。
 
-#### apparentlyFirstQueuedIsExclusive
+### apparentlyFirstQueuedIsExclusive
 
   ```java
   // 一定概率防止读锁非公平获取锁，让它去排队，让写锁不要无限等待。
@@ -414,7 +414,7 @@ final boolean tryWriteLock() {
   > 3. 如果队列的第一个等待节点是`EXCLUSIVE写锁`，那么返回true，当前线程就不能获取读锁。
   > 4. 方法目的：`一定概率阻止读锁非公平获取动作，如果第一个节点是写锁，让读锁去排队，防止写锁无限等待（注意是一定概率，如果第一个是读锁，第二个是写锁，就不会排队），是非完全不公平读锁。`
 
-#### fullTryAcquireShared
+### fullTryAcquireShared
 
   ```java
   // 第一次尝试获取共享锁失败就会进入此方法
@@ -503,7 +503,7 @@ final boolean tryWriteLock() {
 
 ---
 
-### tryLock
+## tryLock
 
   ```java
   final boolean tryReadLock() {
@@ -538,7 +538,7 @@ final boolean tryWriteLock() {
 
   > tryLock和我们分析的tryAcquireShared类似，返回值不同tryLock是boolean值，同时tryLock采用的是`自旋`直到成功获取，或者`写锁被其他线程获取则返回false，获取失败。`
 
-### tryReleaseShared
+## tryReleaseShared
 
   ```java
   // AQS.unlock
@@ -606,7 +606,7 @@ final boolean tryWriteLock() {
 
 ---
 
-### 锁升级与降级
+## 锁升级与降级
 
 读锁线程多个线程共享的，而写锁单个线程独占的，所以写锁的并发限制比读锁高。
 
@@ -620,7 +620,7 @@ final boolean tryWriteLock() {
 
    那为什么支持锁降级呢？因为`写锁是独占的`，此刻只有我一个人持有写锁，所以我想获取读锁就获取，不会有其他人和我抢读锁（除非这个读锁本身，但只是读锁重入而已不会产生竞争）。
 
-### 总结：
+## 总结：
 
 - 如果有一线程持有读锁，那么此时其他线程（包括已持有读锁线程）无法获取写锁`（获取写锁的前提条件是所有的读锁释放完毕）`。
 
@@ -682,7 +682,7 @@ final boolean tryWriteLock() {
   >
   > A：如果线程A在执行use时传递的`想是自己修改的数据，那么需要锁降级`。如果希望`传递的是最新的数据，那么不需要锁降级`。
 
-##### 读写锁总结
+### 读写锁总结
 
 - ReetrentReadWriteLock通过将state变量分为高低16位来解决记录读锁写锁获取的总数。
 - 读锁的私有变HoldCounter记录者当前线程获取读锁的次数，底层通过`ThreadLocal`实现。

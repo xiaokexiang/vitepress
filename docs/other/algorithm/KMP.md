@@ -43,9 +43,9 @@ graph LR
 > 2. next数组的作用：若子串的第n个位置的与主串不匹配，那么需要将子串回退到next[n]的位置再次进行匹配。
 > 3. 计算next[n]最大公共前后缀的子串范围是$P_0P_1...P_{n-1}$。
 
-### 代码推导
+## 代码推导
 
-#### next数组
+### next数组
 
 ![next数组推导](https://image.leejay.top/2025/01/22/564c7ed0-cbe1-4ab6-bc8e-aff1210853bc.gif)
 
@@ -74,7 +74,7 @@ private static int[] getNext(char[] array) {
 }
 ```
 
-#### 字符串匹配
+### 字符串匹配
 ```java
 /**
  * 根据next数组进行匹配，返回匹配成功的第一个index，不匹配则返回-1

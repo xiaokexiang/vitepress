@@ -5,7 +5,7 @@ sort: 40
 
 ## 准备
 
-### 配置TLS版本
+## 配置TLS版本
 
 :::tip
 
@@ -24,7 +24,7 @@ spec:
 EOF
 ```
 
-### 生成域名证书
+## 生成域名证书
 
 :::code-group
 
@@ -54,7 +54,7 @@ $ openssl x509 -req -sha256 -days 365 -CA example_certs1/example.com.crt -CAkey 
 
 :::
 
-###  部署服务
+##  部署服务
 
 :::code-group
 
@@ -171,7 +171,7 @@ EOF
 
 :::
 
-###  生成TLS凭证
+##  生成TLS凭证
 
 通过创建TLS类型的Secret方式来将证书绑定到Gateway类型的网关。需要额外注意Secret的`命名空间`。
 
@@ -191,7 +191,7 @@ $ kubectl create -n istio-system secret tls helloworld-secret \
 
 :::
 
-###  部署网关和虚拟服务
+##  部署网关和虚拟服务
 
 :::code-group
 
@@ -282,7 +282,7 @@ EOF
 >
 > - 不同的域名，最好由不同的`virtualService`分开管理，若不同文件出现相同域名时，按照`文件名字母排序`合并规则，前面的会被覆盖。
 
-###  测试
+##  测试
 
 分别测试下属域名能够访问
 
@@ -310,7 +310,7 @@ $ curl --resolve "helloworld.example.com:$SECURE_INGRESS_PORT:$INGRESS_HOST" --c
 
 :::
 
-### 查看网关代理
+## 查看网关代理
 
 ```bash
 $ kubectl -n istio-system get po -l istio=ingressgateway  | awk 'NR == 2{print $1}' | xargs istioctl proxy-config listener -n istio-system
@@ -337,7 +337,7 @@ ADDRESSES PORT  MATCH                       DESTINATION
 
 :::
 
-### 生成TLS证书
+## 生成TLS证书
 
 ```bash
 $ kubectl create -n istio-system secret generic httpbin-mutual-secret \
@@ -348,7 +348,7 @@ $ kubectl create -n istio-system secret generic httpbin-mutual-secret \
 
 > 服务器使用CA证书来验证其客户端，我们必须使用名称`ca.crt`来指定CA证书。
 
-###  部署网关和虚拟服务
+##  部署网关和虚拟服务
 
 :::code-group
 
@@ -399,7 +399,7 @@ EOF
 
 :::
 
-###  测试
+##  测试
 
 ```bash
 $ curl --resolve "httpbin.example.com:$SECURE_INGRESS_PORT:$INGRESS_HOST" \
@@ -419,7 +419,7 @@ $ curl --resolve "httpbin.example.com:$SECURE_INGRESS_PORT:$INGRESS_HOST" \
 
 :::
 
-###  生成证书凭证
+##  生成证书凭证
 
 ```bash
 $ kubectl -n test create configmap nginx-tls-config \
@@ -427,7 +427,7 @@ $ kubectl -n test create configmap nginx-tls-config \
 --from-file=tls.key=example_certs1/httpbin.example.com.key
 ```
 
-###  部署服务
+##  部署服务
 
 :::code-group
 
@@ -528,7 +528,7 @@ EOF
 
 :::
 
-###  部署网关和虚拟服务
+##  部署网关和虚拟服务
 
 :::code-group
 
@@ -593,7 +593,7 @@ EOF
 
 :::
 
-###  测试
+##  测试
 
 :::code-group
 

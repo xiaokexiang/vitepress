@@ -18,7 +18,7 @@ public class ConditionObject implements Condition {
 }
 ```
 
-##### await
+### await
 
 ```java
 // 执行await时肯定已经获取了锁，所以不需要CAS操作
@@ -117,7 +117,7 @@ final boolean isOnSyncQueue(Node node) {
 >
 > await()方法是响应中断的，这与lock()是不相同的，并且await()会将锁释放。
 
-##### signal
+### signal
 
 ```java
 public final void signal() {
@@ -161,7 +161,7 @@ final boolean transferForSignal(Node node) {
 
 > signal只会将条件队列中第一个符合的节点移到AQS的等待队列
 
-##### signalAll
+### signalAll
 
 ```java
 public final void signalAll() {
@@ -189,13 +189,13 @@ private void doSignalAll(Node first) {
 
 > signal和signalAll执行的流程中都不会释放锁，这点与await不同。
 
-##### await总结
+### await总结
 
 - 将当前节点构建成条件节点加入条件队尾，一个AQS同步队列可以对应着多个条件队列。
 - `释放全部的锁`，特别是重入锁，如果不释放锁会导致死锁。
 - 判断是否在AQS的同步队列中，如果不在就park当前线程，否则就尝试执行获取锁的流程，进而阻塞线程或者获取锁。
 
-##### signal/signalAll总结
+### signal/signalAll总结
 
 - signal会清空头节点在条件队列的引用，头节点还存在，只是队列中引用不在了。
 - signal尝试将`条件队列的头节点添加到AQS同步队列的队尾`，如果头节点在同步队列中的前驱节点状态不符合条件，会唤醒头节点。
