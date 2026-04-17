@@ -6,6 +6,63 @@ import mathjax3 from 'markdown-it-mathjax3';
 import { withMermaid } from "vitepress-plugin-mermaid";
 import path from 'path'
 
+// GitHub 链接转换插件 - 直接在配置中定义
+function markdownItGitHubLink(md) {
+  md.core.ruler.push('github-link', (state) => {
+    const tokens = state.tokens
+    for (let i = 0; i < tokens.length; i++) {
+      if (tokens[i].type !== 'paragraph_open') continue
+      const nextToken = tokens[i + 1]
+      if (!nextToken || nextToken.type !== 'inline') continue
+      const children = nextToken.children
+      if (!children) continue
+
+      // 遍历 children，找出所有符合条件的 GitHub 链接
+      const newChildren = []
+      let hasChanges = false
+
+      for (let j = 0; j < children.length; j++) {
+        // 检查是否是 link_open 且后面还有两个元素
+        if (j + 2 >= children.length) {
+          newChildren.push(children[j])
+          continue
+        }
+
+        const linkOpen = children[j]
+        const text = children[j + 1]
+        const linkClose = children[j + 2]
+
+        if (linkOpen.type !== 'link_open' || text?.type !== 'text' || linkClose?.type !== 'link_close') {
+          newChildren.push(children[j])
+          continue
+        }
+
+        const hrefAttr = linkOpen.attrs?.find(attr => attr[0] === 'href')
+        if (!hrefAttr || !hrefAttr[1].includes('github.com') || text.content.toLowerCase() !== 'github') {
+          newChildren.push(children[j])
+          continue
+        }
+
+        // 转换为 GitHub Card 组件，跳过原始的 link_open/text/link_close
+        const href = hrefAttr[1]
+        // 添加空格分隔（如果后面还有内容）
+        const spaceAfter = j + 3 < children.length ? ' ' : ''
+        newChildren.push({
+          type: 'html_inline',
+          content: `<GitHubCardInline url="${href}" />${spaceAfter}`,
+          level: linkOpen.level
+        })
+        hasChanges = true
+        j += 2 // 跳过已经处理的 text 和 link_close
+      }
+
+      if (hasChanges) {
+        nextToken.children = newChildren
+      }
+    }
+  })
+}
+
 // https://vitepress.dev/reference/site-config
 export default withMermaid(
   defineConfig({
@@ -91,6 +148,7 @@ function markdown() {
     },
     config: (md) => {
       md.use(mathjax3);
+      md.use(markdownItGitHubLink);
     },
     mermaid: true
   }

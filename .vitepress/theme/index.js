@@ -3,6 +3,7 @@ import { h } from 'vue'
 import DefaultTheme from 'vitepress/theme-without-fonts'
 import './style.css'
 import './custom.css'
+import GitHubCardInline from './components/GitHubCardInline.vue'
 import vitepressBackToTop from 'vitepress-plugin-back-to-top'
 import 'vitepress-plugin-back-to-top/dist/style.css'
 import mediumZoom from 'medium-zoom';
@@ -20,6 +21,7 @@ export default {
     vitepressBackToTop({
       threshold:100
     })
+    app.component('GitHubCardInline', GitHubCardInline)
   },
   setup() {
     const route = useRoute();
