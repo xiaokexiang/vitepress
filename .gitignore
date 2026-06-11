@@ -7,3 +7,9 @@ pnpm-lock.yaml
 CLAUDE.md
 .claude
 .planning/cache/
+package-lock.json
+.planning
+.agents
+.baoyu-skills
+skills-lock.json
+cover-image

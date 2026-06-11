@@ -157,6 +157,10 @@ function markdown() {
 function nav() {
   return [
     {
+      text: 'Agentic',
+      link: '/docs/agentic/ClaudeCode的上下文装配.md'
+    },
+    {
       text: 'Java',
       link: '/docs/java/base/知识零碎',
     },
@@ -194,6 +198,7 @@ function nav() {
 
 function sidebar() {
   return {
+    '/docs/agentic': set_sidebar([{ text: 'Agentic', subPath: '/docs/agentic', collapsed: false }]),
     '/docs/java/': set_sidebar([
       { text: '基础', subPath: '/docs/java/base', collapsed: false },
       { text: '框架', subPath: '/docs/java/frame', },
