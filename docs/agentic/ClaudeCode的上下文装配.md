@@ -48,7 +48,7 @@ publish: true
           { "type": "text", "text": "<system-reminder> ...CLAUDE.md / MEMORY.md / currentDate... </system-reminder>" },
           { "type": "text", "text": "你好", "cache_control": { "type": "ephemeral", "ttl": "1h" } }
         ] },
-        { "role": "system", "content": "The following skills are available...\n- gitlab: ...\n- claude-api: ..." }
+        { "role": "system", "content": "Available agent types...\n- Explore: ... (Tools: ...)\n...\nThe following skills are available...\n- gitlab: ...\n- claude-api: ..." }
       ],
       "tools": [
         {
@@ -86,7 +86,7 @@ publish: true
       "system": [ /* 同 A：billing 头 + 人设主体，后两块打 1h 缓存 */ ],
       "messages": [
         { "role": "user",      "content": [ /* <system-reminder> + "你好" */ ] },          // [0]
-        { "role": "system",    "content": "The following skills are available..." },        // [1] Skill 目录
+        { "role": "system",    "content": "Available agent types... + The following skills..." },  // [1] Subagent 名册 + Skill 目录
         { "role": "assistant", "content": [ { "type": "text", "text": "你好！..." } ] },     // [2]
         { "role": "user",      "content": "集群巡检" },                                      // [3]
         { "role": "assistant", "content": [                                                 // [4]
@@ -358,19 +358,41 @@ respond to this context unless it is highly relevant to your task.
 
 ## Skill：目录注入与正文加载
 
-### Skill 的注入点
+### 注入点：一条 role=system 装下 Subagent 名册与 Skill 目录
 
-Skill 目录既不在顶层 `system`，也不在 `user` 消息内，而是 `messages` 中一条独立的 `role: "system"` 消息，紧随首条 `user`（`messages[1]`）：
+这块内容既不在顶层 `system`，也不在 `user` 消息内，而是 `messages` 中一条独立的 `role: "system"` 消息，紧随首条 `user`（`messages[1]`）。它里面**先是 Subagent 名册（`Agent` 工具能派出哪些子代理），后接 Skill 目录**：
 
-```jsonc [messages · Skill 注入在 [1] 位]
+```jsonc [messages · role=system 注入在 [1] 位]
 [
-  { "role": "user",   "content": [ /* system-reminder + 你好 */ ] },     // [0]
-  { "role": "system",                                                     // [!code highlight] [1] Skill 目录
-    "content": "The following skills are available...\n- gitlab: ...\n- deep-research: ...\n- claude-api: ... TRIGGER — read BEFORE ..." },
-  { "role": "assistant", "content": [ /* 问候语 */ ] },                  // [2]
-  { "role": "user",      "content": "集群巡检" }                         // [3]
+  { "role": "user",   "content": [ /* system-reminder + 你好 */ ] },          // [0]
+  { "role": "system",                                                          // [!code highlight] [1] Subagent 名册 + Skill 目录
+    "content": "Available agent types...\n- Explore: ... (Tools: ...)\n...\nThe following skills are available...\n- gitlab: ...\n- claude-api: ... TRIGGER ..." },
+  { "role": "assistant", "content": [ /* 问候语 */ ] },                       // [2]
+  { "role": "user",      "content": "集群巡检" }                              // [3]
 ]
 ```
+
+把这条消息的内容精简后摊开，两部分一目了然：
+
+```text [messages[1] · role=system 内容（精简）]
+Available agent types for the Agent tool:
+- claude: 兜底，任何不匹配专门 agent 的任务都给它。(Tools: *)
+- claude-code-guide: 答 Claude Code / Agent SDK / Claude API 用法。(Tools: Glob, Grep, Read, WebFetch, WebSearch)
+- Explore: 只读搜索，大范围扫文件定位代码、不做审查。(Tools: All tools except Agent, Edit, Write, NotebookEdit)
+- general-purpose: 通用研究 / 多步任务 / 把握不准时的搜索。(Tools: *)
+- Plan: 架构师，产出实施计划。(Tools: 同 Explore，禁写)
+- statusline-setup: 配置状态栏。(Tools: Read, Edit)
+When you launch multiple agents for independent work, send them in a single message...
+
+The following skills are available for use with the Skill tool:
+- gitlab: 查询或编辑 GitLab 数据。
+- jenkins: 查询 Jenkins 2.x 及触发参数化构建。
+- deep-research: 多源、可核查的深度研究报告。
+- claude-api: Claude API / SDK 参考。TRIGGER — ...；SKIP — ...
+- …（其余技能略）
+```
+
+每个 subagent 后面括号里的 `(Tools: …)` 是它的**工具白名单**：`claude` / `general-purpose` 给全量 `*`，`Explore` / `Plan` 禁掉 `Edit` / `Write`（只读不改），`statusline-setup` 只给 `Read, Edit`。主模型据此决定"派哪种子代理、它能动哪些工具"。要注意这只是给主模型看的**名册描述**——子代理和技能真正能不能调，还得靠顶层 `tools` 数组里的 `Agent` / `Skill` 工具定义。
 
 按 Messages API 的标准规则，`messages` 里只能放 `user` 和 `assistant` 两种角色、交替出现，`system`（系统提示）只能待在请求顶层那个单独的 `system` 字段里。把它做成一条消息塞进 `messages` 中间是破例——这要靠请求头 `anthropic-beta` 里开的一个特性开关 `mid-conversation-system-2026-04-07`（字面就是"会话中途的 system 消息"）才被允许。
 
@@ -517,7 +539,7 @@ graph LR
 | 索引 | role | 内容 | 来源 |
 | --- | --- | --- | --- |
 | `[0]` | user | `system-reminder`（CLAUDE.md / Memory 索引 / 日期）+ 用户原文 | harness 拼接 |
-| `[1]` | system | Skill 目录 | harness（mid-conversation-system） |
+| `[1]` | system | Subagent 名册 + Skill 目录 | harness（mid-conversation-system） |
 | `[2]` | assistant | 问候语 | 模型 |
 | `[3]` | user | 「集群巡检」 | 人类 |
 | `[4]` | assistant | thinking + 文本 + `tool_use` | 模型 |
@@ -535,8 +557,8 @@ graph LR
 
 - **三个数组**：`system` 装身份与硬约束（分块、长缓存）、`tools` 装能力声明、`messages` 装随对话演进的事件序列；
 - **`system-reminder`**：会话级上下文（CLAUDE.md、Memory 索引、日期），注入在首条 `user` 消息；
-- **Skill**：目录注入在 `messages` 中段的 `role:system` 消息，正文按需经 `Skill` 工具加载；
+- **Subagent / Skill**：Subagent 名册（含 `(Tools: …)` 工具白名单）与 Skill 目录同处 `messages` 中段那条 `role:system` 消息，Skill 正文再按需经 `Skill` 工具加载；
 - **MCP**：在 `tools[]` 声明，在 `messages[]` 以 `tool_use`/`tool_result` 往返；
 - **Memory**：文件型持久记忆，`MEMORY.md` 索引每会话注入 `system-reminder`，正文按需读取。
 
-贯穿始终的是 `messages` 的角色边界：`assistant` 是模型产出、`user` 是外部喂入（含工具结果）、`system` 是运行时注入。把握这条边界与三个数组的职责分工，一次 Agent 请求的装配过程便不再是黑箱。
+贯穿始终的是 `messages` 的角色边界：`assistant` 是模型产出、`user` 是外部喂入（含工具结果）、`system` 是运行时注入。
