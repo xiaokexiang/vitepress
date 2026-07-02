@@ -1,3 +1,9 @@
+---
+lastUpdated: "2026-06-11T16:00:00+08:00"
+sort: 2
+publish: true
+---
+
 # Xinference CPU 环境安装部署指南
 
 ![Xinference CPU 环境安装部署指南](https://image.leejay.top/2026/07/xinference.png)
